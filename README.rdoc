@@ -19,6 +19,7 @@ http://nokogiri.org/tutorials/installing_nokogiri.html.
 
 == Copyright
 
-Copyright (c) 2011 Pjotr Prins under the liberal BSD licence. 
-See LICENSE.txt for further details.
+Copyright (c) 2011 Pjotr Prins under the liberal MIT licence. 
+See LICENSE.txt and
+http://www.opensource.org/licenses/mit-license.html for further details.
 

@@ -4,9 +4,9 @@
 # Version 0.0.0 
 # Author:: Pjotr Prins
 # Copyright:: 2011
-# License:: The Ruby License
+# License:: MIT License
 
- USAGE = "Describe bioblastxmlparser"
+USAGE = "Describe blastxmlparser"
 
 if ARGV.size == 0
   print USAGE

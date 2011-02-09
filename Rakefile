@@ -15,8 +15,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "bio-blastxmlparser"
   gem.homepage = "http://github.com/pjotrp/bioruby-blastxmlparser"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{BLAST XML parser}
+  gem.description = %Q{Fast big data XML parser and library, written in Ruby}
   gem.email = "pjotr.public01@thebird.nl"
   gem.authors = ["Pjotr Prins"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
