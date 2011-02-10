@@ -1,21 +1,37 @@
 = bio-blastxmlparser
 
 blastxmlparser aims to a fast big-data BLAST XML file parser. Rather
-than loading everything in memory, XML is parsed by query.
+than loading everything in memory, XML is parsed by BLAST query. Not
+only has this the advantage of low memory use, it may also be faster
+when IO continues in parallel (disks read ahead). 
 
-Please note that this is alpha software, at this stage.
+Please note that this is experimental software, at this stage.
+
+== Performance
+
+To see why libxml2 based Nokogiri is fast, see
+http://www.rubyinside.com/ruby-xml-performance-benchmarks-1641.html
+and http://www.xml.com/lpt/a/1703.
+
+The parser is also designed with other optimizations in mind, such as
+lazy evaluation, and parallelization. blastxmlparser is written in
+Ruby and C, but can also be used without knowing Ruby.
 
 == Install
 
   gem install bio-blastxmlparser
 
-Nokogiri XML parser is required. To install it, the libxml2 libraries
-and headers need to be installed first, for example on Debian:
+For this version the Nokogiri XML parser is required. To install it,
+the libxml2 libraries and headers need to be installed first, for
+example on Debian:
 
   apt-get install libxslt-dev libxml2-dev
 
 for more installation on other platforms see
-http://nokogiri.org/tutorials/installing_nokogiri.html.
+http://nokogiri.org/tutorials/installing_nokogiri.html. 
+
+== Run
+
 
 == Copyright
 
