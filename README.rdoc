@@ -30,12 +30,24 @@ example on Debian:
 for more installation on other platforms see
 http://nokogiri.org/tutorials/installing_nokogiri.html. 
 
-== Run
 
+Usage: blastxmlparser [options] file(s)
+
+        --logger filename            Log to file (default stderr)
+        --trace options              Set log level (default INFO, see bio-logger)
+    -q, --quiet                      Run quietly
+    -v, --verbose                    Run verbosely
+        --debug                      Show debug messages
+    -h, --help                       Show help and examples
+== Usage
+
+  bioblastxmlparser filename(s)
+
+== URL
+
+The project lives at http://github.com/pjotrp/blastxmlparser. If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
 
 == Copyright
 
-Copyright (c) 2011 Pjotr Prins under the liberal MIT licence. 
-See LICENSE.txt and
-http://www.opensource.org/licenses/mit-license.html for further details.
+Copyright (c) 2011 Pjotr Prins under the liberal MIT licence.  See LICENSE.txt and http://www.opensource.org/licenses/mit-license.html for further details.
 

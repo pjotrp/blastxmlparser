@@ -15,7 +15,18 @@ BLASTXML_VERSION = File.new(File.join(rootpath,'VERSION')).read.chomp
 $stderr.print "BioRuby BLAST XML Parser "+BLASTXML_VERSION+" Copyright (C) 2011 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
 
 USAGE = <<EOM
-bioblastxml xmlfilename(s)
+== Usage
+
+  bioblastxmlparser filename(s)
+
+== URL
+
+The project lives at http://github.com/pjotrp/blastxmlparser. If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
+
+== Copyright
+
+Copyright (c) 2011 Pjotr Prins under the liberal MIT licence.  See LICENSE.txt and http://www.opensource.org/licenses/mit-license.html for further details.
+
 EOM
 
 if ARGV.size == 0
