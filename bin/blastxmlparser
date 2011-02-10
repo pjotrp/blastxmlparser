@@ -15,7 +15,6 @@ BLASTXML_VERSION = File.new(File.join(rootpath,'VERSION')).read.chomp
 $stderr.print "BioRuby BLAST XML Parser "+BLASTXML_VERSION+" Copyright (C) 2011 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
 
 USAGE = <<EOM
-== Usage
 
   bioblastxmlparser filename(s)
 
@@ -48,9 +47,10 @@ opts = OptionParser.new do |o|
     exit()
   }
 
-  o.banner = "Usage: #{File.basename($0)} [options] file(s)"
+  o.banner = "== Usage\n  #{File.basename($0)} [options] file(s)"
 
   o.separator ""
+
   o.on("--logger filename",String,"Log to file (default stderr)") do | name |
     Bio::Log::CLI.logger(name)
   end
