@@ -17,4 +17,8 @@ time ./sample/libxml_sax.rb
 echo ====
 echo Nokogiri DOM
 time sample/nokogiri_dom.rb > /dev/null
+echo ====
+echo Nokogiri split DOM
+time sample/nokogiri_split_dom.rb > /dev/null
+ 
  
