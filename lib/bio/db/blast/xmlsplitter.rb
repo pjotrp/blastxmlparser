@@ -4,7 +4,7 @@ module Bio
   module Blast
     # Reads a full XML result and splits it out into a buffer for each
     # Iteration (query result).
-    class XmlBulkParser
+    class XmlSplitter
       # include Nokogiri
       def initialize fn
         @fn = fn
