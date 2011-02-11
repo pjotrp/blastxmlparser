@@ -11,6 +11,10 @@ module Bio
       end
     end
 
+    class NokogiriBlastHit
+    end
+
+
     class NokogiriBlastIterator
       include XPath
 
@@ -36,9 +40,9 @@ module Bio
         @xml = xml
       end
 
-      # def iter_num
-      #   field('Iteration_iter-num').to_i
-      # end
+      def hits
+
+      end
 
     end
 

@@ -24,13 +24,13 @@ describe "Bio::Blast::NokogiriBlastXml" do
     @iter1.query_def.should == "I_1 [477 - 884] "
     @iter1.query_len.should == 408
   end
-  it "should iterate Hits"
   it "should support Hit fields" do
-    @iter1.hit_num.should == 1
-    @iter1.hit_id.should == "lcl|I_74685"
-    @iter1.hit_def.should == "[57809 - 57666] (REVERSE SENSE) "
-    @iter1.hit_accession.should == "I_74685"
-    @iter1.hit_len.should == 144
+    hit = @iter1.hits[0]
+    hit.num.should == 1
+    hit.id.should == "lcl|I_74685"
+    hit.def.should == "[57809 - 57666] (REVERSE SENSE) "
+    hit.accession.should == "I_74685"
+    hit.len.should == 144
   end
   it "should iterate Hsps in a hit"
   it "should support Hsp fields"
