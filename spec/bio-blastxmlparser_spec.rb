@@ -1,7 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe "BioBlastxmlparser" do
-  it "fails" do
-    fail "hey buddy, you should probably rename this file and start specing for real"
+describe Bio::Blast::XmlBulkParser do
+  include Bio::Blast
+  it "should read a large file and yield Iterations" do
+    p = XmlBulkParser.new("./test/data/nt_example_blastn.m7")
+    p.each do | result |
+    end
   end
 end
