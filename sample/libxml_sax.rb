@@ -11,7 +11,7 @@ class PostCallbacks
   def on_start_element(element, attributes)
     if element == 'Iteration_iter-num'
       # Process row of data here
-      print "---- ",element.to_s
+      print "---- ",element
     end
     # if element == 'Hsp_score'
     #   print "---- ",element
