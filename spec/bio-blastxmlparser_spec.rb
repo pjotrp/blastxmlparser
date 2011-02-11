@@ -10,15 +10,17 @@ describe Bio::Blast::XmlSplitter do
   end
 end
 
-describe "Bio::Blast::NokogiriBlast" do
+describe "Bio::Blast::NokogiriBlastXml" do
   include Bio::Blast
-  it "should return Iteration info"
-  it "should iterate Hsps"
+  it "should return Iteration header fields"
+  it "should iterate Hits"
+  it "should support Hit fields"
+  it "should iterate Hsps in a hit"
   it "should support Hsp fields"
 end
 
 describe Bio::Blast::XmlIterator do
   include Bio::Blast
-  it "should parse with Nokogiri" do
-  end
+  it "should parse with Nokogiri"
+  it "should parse with Nokogiri and XmlSplitter combined"
 end
