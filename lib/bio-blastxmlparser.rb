@@ -13,3 +13,4 @@ require 'bio-logger'
 Bio::Log::LoggerPlus.new('bio-blastxmlparser')
 
 require 'bio/db/blast/xmlsplitter'
+require 'bio/db/blast/xmliterator'
