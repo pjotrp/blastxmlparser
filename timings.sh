@@ -10,10 +10,10 @@ cat test/data/nt_example_blastn.m7 > /dev/null
 time cat test/data/nt_example_blastn.m7 > /dev/null
 echo ====
 echo Nokogiri SAX
-time ./sample/nokogiri_sax.rb 
+time ./sample/nokogiri_sax.rb > /dev/null
 echo ====
 echo LibXML SAX
-time ./sample/libxml_sax.rb 
+time ./sample/libxml_sax.rb > /dev/null
 echo ====
 echo Nokogiri DOM
 time sample/nokogiri_dom.rb > /dev/null
