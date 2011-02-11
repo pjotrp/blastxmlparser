@@ -1,5 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
+TESTFILE = "./test/data/nt_example_blastn.m7"
 describe Bio::Blast::XmlSplitter do
   include Bio::Blast
   it "should read a large file and yield Iterations" do
@@ -12,9 +13,25 @@ end
 
 describe "Bio::Blast::NokogiriBlastXml" do
   include Bio::Blast
-  it "should return Iteration header fields"
+  before(:all) do
+    n = NokogiriBlastXml.new(File.new(TESTFILE)).to_enum
+    @iter1 = n.next
+    @iter2 = n.next
+  end
+  it "should return Iteration header fields" do
+    @iter1.iter_num.should == 1
+    @iter1.query_id.should == "lcl|1_0"
+    @iter1.query_def.should == "I_1 [477 - 884] "
+    @iter1.query_len.should == 408
+  end
   it "should iterate Hits"
-  it "should support Hit fields"
+  it "should support Hit fields" do
+    @iter1.hit_num.should == 1
+    @iter1.hit_id.should == "lcl|I_74685"
+    @iter1.hit_def.should == "[57809 - 57666] (REVERSE SENSE) "
+    @iter1.hit_accession.should == "I_74685"
+    @iter1.hit_len.should == 144
+  end
   it "should iterate Hsps in a hit"
   it "should support Hsp fields"
 end

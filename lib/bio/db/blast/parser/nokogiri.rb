@@ -1,0 +1,64 @@
+
+require 'nokogiri'
+require 'enumerator'
+
+module Bio
+  module Blast
+
+    module XPath
+      def field name
+        @xml.xpath(name+"/text()").to_s
+      end
+    end
+
+    class NokogiriBlastIterator
+      include XPath
+
+      STRS = { :query_id => 'Iteration_query-ID',
+               :query_def => 'Iteration_query-def' }
+
+      STRS.each { |k,v| 
+        define_method(k) {
+          field(v)
+        }
+      }
+
+      INTS = { :iter_num => 'Iteration_iter-num',
+               :query_len => 'Iteration_query-len' }
+
+      INTS.each { |k,v| 
+        define_method(k) {
+          field(v).to_i
+        }
+      }
+
+      def initialize xml
+        @xml = xml
+      end
+
+      # def iter_num
+      #   field('Iteration_iter-num').to_i
+      # end
+
+    end
+
+    class NokogiriBlastXml 
+      def initialize xml
+        @xml = xml
+      end
+
+      def to_enum
+        Enumerator.new { |yielder| 
+          each { | iterator | yielder.yield(iterator) }
+        }
+      end
+
+      def each &block
+        input = Nokogiri::XML(@xml)
+        input.root.xpath("//Iteration").each do | iteration |
+          block.call(NokogiriBlastIterator.new(iteration))
+        end
+      end
+    end
+  end
+end
