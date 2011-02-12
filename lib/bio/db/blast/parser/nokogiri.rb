@@ -9,6 +9,14 @@ module Bio
       def field name
         @xml.xpath(name+"/text()").to_s
       end
+
+      def define_xml_s map
+        map.each { |k,v| 
+          define_method(k) {
+            field(v)
+          }
+        }
+      end
     end
 
     class NokogiriBlastHit
@@ -18,14 +26,8 @@ module Bio
     class NokogiriBlastIterator
       include XPath
 
-      STRS = { :query_id => 'Iteration_query-ID',
-               :query_def => 'Iteration_query-def' }
-
-      STRS.each { |k,v| 
-        define_method(k) {
-          field(v)
-        }
-      }
+      define_xml_s { :query_id  => 'Iteration_query-ID',
+                     :query_def => 'Iteration_query-def' }
 
       INTS = { :iter_num => 'Iteration_iter-num',
                :query_len => 'Iteration_query-len' }
