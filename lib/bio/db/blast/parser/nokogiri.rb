@@ -14,6 +14,7 @@ module Bio
 
     # Some magic to creat XML -> method mappers, on the fly
     module MapXML
+      include XPath
       def MapXML.define_s map
         map.each { |k,v| 
           define_method(v) {
@@ -34,7 +35,6 @@ module Bio
     end
 
     class NokogiriBlastIterator
-      include XPath
       include MapXML
 
       MapXML.define_s 'Iteration_query-ID'  => :query_id,  
