@@ -32,7 +32,9 @@ describe "Bio::Blast::NokogiriBlastXml" do
     hit.accession.should == "I_74685"
     hit.len.should == 144
   end
-  it "should iterate Hsps in a hit"
+  it "should iterate Hsps in a hit" do
+    hsp = @iter1.hits.first.hsps.first
+  end
   it "should support Hsp fields"
 end
 
