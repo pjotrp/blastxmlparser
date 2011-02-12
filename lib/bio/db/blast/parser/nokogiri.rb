@@ -13,16 +13,16 @@ module Bio
     end
 
     # Some magic to creat XML -> method mappers, on the fly
-    module MapXML
+    module MapXPath
       include XPath
-      def MapXML.define_s map
+      def MapXPath.define_s map
         map.each { |k,v| 
           define_method(v) {
             field(k)
           }
         }
       end
-      def MapXML.define_i map
+      def MapXPath.define_i map
         map.each { |k,v| 
           define_method(v) {
             field(k).to_i
@@ -32,16 +32,27 @@ module Bio
     end
 
     class NokogiriBlastHit
+      include MapXPath
+      MapXPath.define_s 'Hit_id' => :id,
+                        'Hit_def' => :def,
+                        'Hit_accession' => :accession
+      MapXPath.define_i 'Hit_num' => :num, 
+                        'Hit_len' => :len
+
+      def initialize xml
+        @xml = xml
+      end
+      
     end
 
     class NokogiriBlastIterator
-      include MapXML
+      include MapXPath
 
-      MapXML.define_s 'Iteration_query-ID'  => :query_id,  
-                      'Iteration_query-def' => :query_def 
+      MapXPath.define_s 'Iteration_query-ID'  => :query_id,  
+                        'Iteration_query-def' => :query_def 
 
-      MapXML.define_i 'Iteration_iter-num'  => :iter_num,
-                      'Iteration_query-len' => :query_len
+      MapXPath.define_i 'Iteration_iter-num'  => :iter_num,
+                        'Iteration_query-len' => :query_len
 
 
       def initialize xml
@@ -49,7 +60,11 @@ module Bio
       end
 
       def hits
-
+        Enumerator.new { |yielder|
+          @xml.xpath("//Hit").each { | hit |
+            yielder.yield NokogiriBlastHit.new(hit)
+          }
+        }
       end
 
     end

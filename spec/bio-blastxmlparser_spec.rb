@@ -25,7 +25,7 @@ describe "Bio::Blast::NokogiriBlastXml" do
     @iter1.query_len.should == 408
   end
   it "should support Hit fields" do
-    hit = @iter1.first
+    hit = @iter1.hits.first
     hit.num.should == 1
     hit.id.should == "lcl|I_74685"
     hit.def.should == "[57809 - 57666] (REVERSE SENSE) "
