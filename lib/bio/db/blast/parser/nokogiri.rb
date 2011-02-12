@@ -10,10 +10,21 @@ module Bio
         @xml.xpath(name+"/text()").to_s
       end
 
-      def define_xml_s map
+    end
+
+    # Some magic to creat XML -> method mappers, on the fly
+    module MapXML
+      def MapXML.define_s map
         map.each { |k,v| 
-          define_method(k) {
-            field(v)
+          define_method(v) {
+            field(k)
+          }
+        }
+      end
+      def MapXML.define_i map
+        map.each { |k,v| 
+          define_method(v) {
+            field(k).to_i
           }
         }
       end
@@ -22,21 +33,16 @@ module Bio
     class NokogiriBlastHit
     end
 
-
     class NokogiriBlastIterator
       include XPath
+      include MapXML
 
-      define_xml_s { :query_id  => 'Iteration_query-ID',
-                     :query_def => 'Iteration_query-def' }
+      MapXML.define_s 'Iteration_query-ID'  => :query_id,  
+                      'Iteration_query-def' => :query_def 
 
-      INTS = { :iter_num => 'Iteration_iter-num',
-               :query_len => 'Iteration_query-len' }
+      MapXML.define_i 'Iteration_iter-num'  => :iter_num,
+                      'Iteration_query-len' => :query_len
 
-      INTS.each { |k,v| 
-        define_method(k) {
-          field(v).to_i
-        }
-      }
 
       def initialize xml
         @xml = xml
