@@ -57,14 +57,10 @@ describe "Bio::Blast::NokogiriBlastXml" do
     hsp.midline.should == "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
     @iter2.iter_num.should == 2
     hits = @iter2.hits.first(3)
-    hits.each do | hit |
-      p hit
-    end
-    hsps = hits.first(2)[1].hsps
-    hsps.each do | hsp |
-      p hsp
-    end
-    hsps[1].bit_score.should == 69.8753
+    hits.map { | h | h.hit_num }.should == [1,2,3]
+    hsps = hits[1].hsps
+    hsps.map { | hsp | hsp.hsp_num }.should == [1]
+    hsps.first.bit_score.should == 109.522
   end
   it "should support Hsp parent" do
     hsp = @iter1.hits.first.hsps.first
@@ -82,7 +78,7 @@ describe "Bio::Blast::NokogiriBlastXml" do
     hsp.bit_score.should == 145.205
     hsp.field("Hsp_bit-score").should == "145.205"
     hsp["Hsp_bit-score"].should == "145.205"
-    hsp["bit-score"].should == "145.205"
+    # later: hsp["bit-score"].should == "145.205"
     hsp["Hsp_hseq"].should == "AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG"
   end
 end

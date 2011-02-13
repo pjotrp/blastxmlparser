@@ -36,6 +36,10 @@ module Bio
           }
         }
       end
+      def [] name
+        field(name)
+      end
+
     end
 
     class NokogiriBlastHsp
@@ -66,7 +70,7 @@ module Bio
 
       def to_s
         s = <<EOM
-Hsp: hsp_num=#{hsp_num}, score=#{score}, bit_score=#{bit_score}
+  hit_num=#{parent.hit_num}, hsp_num=#{hsp_num}, score=#{score}, bit_score=#{bit_score}
 EOM
       end
       
@@ -85,18 +89,29 @@ EOM
         @xml = hit
         @parent = parent
       end
-      
+
       def hsps
+        # num = hit_num
+        # Enumerator.new { |yielder|
+          # @xml.xpath("//Hit[Hit_num==#{hit_num}]Hit_hsps/Hsp/*").each { | hsp |
+          #   yielder.yield NokogiriBlastHsp.new(hsp,self)
+          # }
         Enumerator.new { |yielder|
-          @xml.xpath("//Hsp").each { | hsp |
-            yielder.yield NokogiriBlastHsp.new(hsp,self)
-          }
+          @xml.children.each do | hit_field |
+            if hit_field.name == 'Hit_hsps'
+              hit_field.children.each do | hsp |
+                if hsp.name == 'Hsp'
+                  yielder.yield NokogiriBlastHsp.new(hsp,self)
+                end
+              end
+            end
+          end
         }
       end
 
       def to_s
         s = <<EOM
-Hit: hit_id=#{hit_id}, hit_def=#{hit_def}, hit_num=#{hit_num}
+iter_num=#{parent.iter_num}, hit_id=#{hit_id}, hit_def=#{hit_def}, hit_num=#{hit_num}
 EOM
       end
       
@@ -119,9 +134,18 @@ EOM
 
       def hits
         Enumerator.new { |yielder|
-          @xml.xpath("//Hit").each { | hit |
-            yielder.yield NokogiriBlastHit.new(hit,self)
-          }
+          # @xml.xpath("//Hit").each { | hit |
+          #   yielder.yield NokogiriBlastHit.new(hit,self)
+          # }
+          @xml.children.each do | iter_field |
+            if iter_field.name == 'Iteration_hits'
+              iter_field.children.each do | hit |
+                if hit.name == 'Hit'
+                  yielder.yield NokogiriBlastHit.new(hit,self)
+                end
+              end
+            end
+          end
         }
       end
 
@@ -139,9 +163,20 @@ EOM
       end
 
       def each &block
-        input = Nokogiri::XML(@xml)
-        input.root.xpath("//Iteration").each do | iteration |
-          block.call(NokogiriBlastIterator.new(iteration,self))
+        doc = Nokogiri::XML(@xml) { | cfg | cfg.noblanks }
+        # input.root.xpath("//Iteration").each do | iteration |
+        #   block.call(NokogiriBlastIterator.new(iteration,self))
+        # end
+        doc.root.children.each do |blastnode|
+          if blastnode.name == 'BlastOutput_iterations'
+            blastnode.children.each do | iteration |
+              if iteration.name == 'Iteration'
+                # print iteration.to_s
+                # exit
+                block.call(NokogiriBlastIterator.new(iteration,self))
+              end
+            end
+          end
         end
       end
     end
