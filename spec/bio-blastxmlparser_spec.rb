@@ -33,6 +33,8 @@ describe "Bio::Blast::NokogiriBlastXml" do
     hit.accession.should == "I_74685"
     hit.len.should == 144
   end
+  it "should support Hit parent"
+
   it "should support Hsps" do
     hsp = @iter1.hits.first.hsps.first
     hsp.hsp_num.should == 1
@@ -54,11 +56,17 @@ describe "Bio::Blast::NokogiriBlastXml" do
     hits.each do | hit |
       p hit
     end
+    hsps = hits.first(2)[1].hsps
     hsps.each do | hsp |
       p hsp
     end
     hsps[1].bit_score.should == 69.8753
   end
+  it "should support Hsp parent" do
+    hsp = @iter1.hits.first.hsps.first
+    hsp.parent.hit_id.should == "lcl|I_74685"
+  end
+
   it "should support Hit XML fields" do
     hit = @iter1.hits.first
     hit.hit_num.should == 1

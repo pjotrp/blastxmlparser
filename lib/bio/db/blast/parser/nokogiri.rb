@@ -40,6 +40,7 @@ module Bio
 
     class NokogiriBlastHsp
       include MapXPath
+      attr_reader :parent
       MapXPath.define_s 'Hsp_id'          => :hsp_id,
                         'Hsp_qseq'        => :qseq,
                         'Hsp_hseq'        => :hseq,
@@ -58,13 +59,14 @@ module Bio
       MapXPath.define_f 'Hsp_bit-score'   => :bit_score,
                         'Hsp_evalue'      => :evalue
                          
-      def initialize xml
+      def initialize xml, parent
         @xml = xml
+        @parent = parent
       end
 
       def to_s
         s = <<EOM
-Hsp: id=#{hsp_id}, score=#{score}, bit_score=#{bit_score}
+Hsp: hsp_num=#{hsp_num}, score=#{score}, bit_score=#{bit_score}
 EOM
       end
       
@@ -72,27 +74,29 @@ EOM
 
     class NokogiriBlastHit
       include MapXPath
+      attr_reader :parent
       MapXPath.define_s 'Hit_id' => :hit_id,
                         'Hit_def' => :hit_def,
                         'Hit_accession' => :accession
       MapXPath.define_i 'Hit_num' => :hit_num, 
                         'Hit_len' => :len
 
-      def initialize xml
-        @xml = xml
+      def initialize hit, parent
+        @xml = hit
+        @parent = parent
       end
       
       def hsps
         Enumerator.new { |yielder|
           @xml.xpath("//Hsp").each { | hsp |
-            yielder.yield NokogiriBlastHsp.new(hsp)
+            yielder.yield NokogiriBlastHsp.new(hsp,self)
           }
         }
       end
 
       def to_s
         s = <<EOM
-Hit: id=#{hit_id}, hit_def=#{hit_def}, hit_num=#{hit_num}
+Hit: hit_id=#{hit_id}, hit_def=#{hit_def}, hit_num=#{hit_num}
 EOM
       end
       
@@ -100,7 +104,7 @@ EOM
 
     class NokogiriBlastIterator
       include MapXPath
-
+      attr_reader :parent
       MapXPath.define_s 'Iteration_query-ID'  => :query_id,  
                         'Iteration_query-def' => :query_def 
 
@@ -108,14 +112,15 @@ EOM
                         'Iteration_query-len' => :query_len
 
 
-      def initialize xml
-        @xml = xml
+      def initialize iterator, parent
+        @xml = iterator
+        @parent = parent
       end
 
       def hits
         Enumerator.new { |yielder|
           @xml.xpath("//Hit").each { | hit |
-            yielder.yield NokogiriBlastHit.new(hit)
+            yielder.yield NokogiriBlastHit.new(hit,self)
           }
         }
       end
@@ -123,8 +128,8 @@ EOM
     end
 
     class NokogiriBlastXml 
-      def initialize xml
-        @xml = xml
+      def initialize document
+        @xml = document
       end
 
       def to_enum
@@ -136,7 +141,7 @@ EOM
       def each &block
         input = Nokogiri::XML(@xml)
         input.root.xpath("//Iteration").each do | iteration |
-          block.call(NokogiriBlastIterator.new(iteration))
+          block.call(NokogiriBlastIterator.new(iteration,self))
         end
       end
     end
