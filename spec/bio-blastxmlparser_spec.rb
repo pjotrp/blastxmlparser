@@ -36,6 +36,7 @@ describe "Bio::Blast::NokogiriBlastXml" do
   it "should support Hit parent" do
     hit = @iter1.hits.first
     hit.parent.should == @iter1
+    hit.parent.query_id.should == "lcl|1_0"
   end
 
   it "should support Hsps" do
