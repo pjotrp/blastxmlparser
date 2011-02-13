@@ -33,7 +33,10 @@ describe "Bio::Blast::NokogiriBlastXml" do
     hit.accession.should == "I_74685"
     hit.len.should == 144
   end
-  it "should support Hit parent"
+  it "should support Hit parent" do
+    hit = @iter1.hits.first
+    hit.parent.should == @iter1
+  end
 
   it "should support Hsps" do
     hsp = @iter1.hits.first.hsps.first
