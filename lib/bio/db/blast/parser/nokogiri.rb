@@ -124,6 +124,10 @@ EOM
 
       def initialize iterator, parent
         @xml = iterator
+        # p [:size,@xml.children.size]
+        #
+        # print @xml.to_s if @xml.children.size==1
+        p field('Iteration_iter-num')
         @parent = parent
       end
 
@@ -141,6 +145,11 @@ EOM
         }
       end
 
+      def to_s
+        s = <<EOM
+iter_num=#{iter_num}, query_id=#{query_id}
+EOM
+      end
     end
 
     class NokogiriBlastXml 

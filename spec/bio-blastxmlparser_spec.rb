@@ -1,15 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 TESTFILE = "./test/data/nt_example_blastn.m7"
-describe Bio::Blast::XmlSplitter do
-  include Bio::Blast
-  it "should read a large file and yield Iterations" do
-    s = XmlSplitter.new("./test/data/nt_example_blastn.m7")
-    s.each do | result |
-      result[1].to_s.should =~ /Iteration_iter-num/
-    end
-  end
-end
 
 describe "Bio::Blast::NokogiriBlastXml" do
   include Bio::Blast
@@ -85,6 +76,31 @@ end
 
 describe Bio::Blast::XmlIterator do
   include Bio::Blast
-  it "should parse with Nokogiri"
-  it "should parse with Nokogiri and XmlSplitter combined"
+  it "should parse with Nokogiri" do
+    blast = XmlIterator.new(TESTFILE).to_enum
+    iter1 = blast.next
+    iter1.query_id.should == "lcl|1_0"
+    iter2 = blast.next
+    iter2.query_id.should == "lcl|2_0"
+  end
+end
+
+describe Bio::Blast::XmlSplitterIterator do
+  include Bio::Blast
+  # it "should read a large file and yield Iterations" do
+  #   s = XmlSplitter.new("./test/data/nt_example_blastn.m7")
+  #   s.each do | result |
+  #     result[1].to_s.should =~ /Iteration_iter-num/
+  #   end
+  # end
+
+  it "should parse with Nokogiri and XmlSplitter combined" do
+    blast = XmlSplitterIterator.new(TESTFILE).to_enum
+    iter1 = blast.next
+    print iter1.to_s
+    iter2 = blast.next
+    print iter2.to_s
+    iter1.query_id.should == "lcl|1_0"
+    iter2.query_id.should == "lcl|2_0"
+  end
 end
