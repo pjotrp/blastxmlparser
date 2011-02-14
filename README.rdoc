@@ -1,31 +1,38 @@
 = bio-blastxmlparser
 
-blastxmlparser aims to a fast big-data BLAST XML file parser. Rather
-than loading everything in memory, XML is parsed by BLAST query. Not
-only has this the advantage of low memory use, it may also be faster
-when IO continues in parallel (disks read ahead). 
+blastxmlparser is a fast big-data BLAST XML file parser. Rather than
+loading everything in memory, XML is parsed by BLAST query
+(Iteration). Not only has this the advantage of low memory use, it may
+also be faster when IO continues in parallel (disks read ahead).
 
-Please note that this is experimental software, at this stage.
+Next to the API, blastxmlparser comes as a command line utility, which
+can be used to filter results and requires no understanding of Ruby.
 
 == Performance
 
-To see why libxml2 based Nokogiri is fast, see
+XML parsing is expensive. blastxmlparser uses a C or Java XML parser,
+Nokogiri + libxml2. Basically a DOM parser is used for subsections of
+a document, tests show this is faster than a SAX parser with Ruby
+callbacks.  To see why libxml2 based Nokogiri is fast, see
 http://www.rubyinside.com/ruby-xml-performance-benchmarks-1641.html
-and http://www.xml.com/lpt/a/1703.
+and http://www.xml.com/lpt/a/1703. 
 
 The parser is also designed with other optimizations in mind, such as
-lazy evaluation, and parallelization. blastxmlparser is written in
-Ruby and C, but can also be used without knowing Ruby.
+lazy evaluation, only creating objects when required, and
+parallelization. When parsing a full BLAST result usually only a few
+fields are used. By using XPath queries only the relevant fields are
+queried.
 
 == Install
 
   gem install bio-blastxmlparser
 
-For this version the Nokogiri XML parser is required. To install it,
+Nokogiri XML parser is required. To install it,
 the libxml2 libraries and headers need to be installed first, for
 example on Debian:
 
   apt-get install libxslt-dev libxml2-dev
+  gem install bio-blastxmlparser
 
 for more installation on other platforms see
 http://nokogiri.org/tutorials/installing_nokogiri.html. 
@@ -49,5 +56,5 @@ The project lives at http://github.com/pjotrp/blastxmlparser. If you use this so
 
 == Copyright
 
-Copyright (c) 2011 Pjotr Prins under the liberal MIT licence.  See LICENSE.txt and http://www.opensource.org/licenses/mit-license.html for further details.
+Copyright (c) 2011 Pjotr Prins under the MIT licence.  See LICENSE.txt and http://www.opensource.org/licenses/mit-license.html for further details.
 

@@ -108,6 +108,11 @@ EOM
         }
       end
 
+      def each
+        hsps.each { | h | yield h }
+      end
+
+
       def to_s
         s = <<EOM
 iter_num=#{parent.iter_num}, hit_id=#{hit_id}, hit_def=#{hit_def}, hit_num=#{hit_num}
@@ -152,6 +157,10 @@ EOM
             end
           end
         }
+      end
+
+      def each
+        hits.each { | h | yield h }
       end
 
       def to_s

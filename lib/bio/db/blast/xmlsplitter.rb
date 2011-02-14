@@ -9,6 +9,8 @@ module Bio
 
       def to_enum 
         Enumerator.new do | yielder | 
+          logger = Bio::Log::LoggerPlus['bio-blastxmlparser']
+          logger.info("split file parsing #{@fn}")
           f = File.open(@fn)
           # Skip BLAST header
           f.each_line do | line |

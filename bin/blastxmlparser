@@ -18,26 +18,44 @@ USAGE = <<EOM
 
   bioblastxmlparser filename(s)
 
+== Examples
+
+Print result fields of iterations containing 'lcl', using a regex
+
+  blastxmlparser -e 'iter.query_id=~/lcl/' test/data/nt_example_blastn.m7
+
+Print fields where bit_score > 145
+
+  blastxmlparser -e 'hsp.bit_score>145' test/data/nt_example_blastn.m7
+
+Print named fields where E-value < 0.001 and hit length > 100
+
+  blastxmlparser -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+
 == URL
 
 The project lives at http://github.com/pjotrp/blastxmlparser. If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
 
 == Copyright
 
-Copyright (c) 2011 Pjotr Prins under the liberal MIT licence.  See LICENSE.txt and http://www.opensource.org/licenses/mit-license.html for further details.
+Copyright (c) 2011 Pjotr Prins under the MIT licence.  See LICENSE.txt and http://www.opensource.org/licenses/mit-license.html for further details.
 
 EOM
 
 if ARGV.size == 0
   print USAGE
+  exit 1
 end
 
 require 'bio-blastxmlparser'
 require 'optparse'
+require 'ostruct'
 
 require 'bio-logger'
 Bio::Log::CLI.logger('stderr')
 Bio::Log::CLI.trace('info')
+
+options = OpenStruct.new()
 
 opts = OptionParser.new do |o|
 
@@ -49,6 +67,12 @@ opts = OptionParser.new do |o|
 
   o.banner = "== Usage\n  #{File.basename($0)} [options] file(s)"
 
+  o.separator ""
+
+  o.on("-e filter","--exec filter",String, "Execute filter") do |s|
+    options.exec = s
+  end
+  
   o.separator ""
 
   o.on("--logger filename",String,"Log to file (default stderr)") do | name |
@@ -77,7 +101,28 @@ begin
   opts.parse!(ARGV)
 
   Bio::Log::CLI.configure('bio-blastxmlparser')
+  logger = Bio::Log::LoggerPlus['bio-blastxmlparser']
 
+  ARGV.each do | fn |
+    logger.info("XML parsing #{fn}")
+    n = Bio::Blast::XmlIterator.new(fn).to_enum
+    i = 1
+    n.each do | iter |
+      iter.each do | hit |
+        hit.each do | hsp |
+          do_print = if options.exec
+                       eval(options.exec)
+                     else
+                       true
+                     end
+          if do_print
+            print [i,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t"),"\n" if do_print
+            i += 1
+          end
+        end
+      end
+    end
+  end
 rescue OptionParser::InvalidOption => e
-  options[:invalid_argument] = e.message
+  opts[:invalid_argument] = e.message
 end
