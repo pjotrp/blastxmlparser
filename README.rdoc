@@ -58,18 +58,98 @@ http://nokogiri.org/tutorials/installing_nokogiri.html.
 
 == API
 
-To use the parser
+To loop through a BLAST result:
 
     >> require 'bio-blastxmlparser'
     >> fn = 'test/data/nt_example_blastn.m7'
-    >> Bio::Blast::XmlIterator.new(fn).to_enum
-    >> n.each do | iter |
-    >>   iter.each do | hit |
-    >>     puts "Hits for " + report.query_def
-    >>     hit.each do | hsp |
+    >>   n = Bio::Blast::XmlIterator.new(fn).to_enum
+    >>   n.each do | iter |
+    >>     puts "Hits for " + iter.query_id
+    >>     iter.each do | hit |
+    >>       hit.each do | hsp |
+    >>         print hit.hit_id, "\t", hsp.evalue, "\n" if hsp.evalue < 0.001
+    >>       end
     >>     end
     >>   end
-    >> end
+
+The next example parses XML using less memory
+
+    >> blast = XmlSplitterIterator.new(fn).to_enum
+    >> iter = blast.next
+    >> iter.iter_num
+    >> 1
+    >> iter.query_id
+    => "lcl|1_0"
+
+Get the first hit
+
+    >> hit = iter.hits.first
+    >> hit.hit_num
+    => 1
+    >> hit.hit_id
+    => "lcl|I_74685"
+    >> hit.hit_def
+    => "[57809 - 57666] (REVERSE SENSE) "
+    >> hit.accession
+    => "I_74685"
+    >> hit.len
+    => 144
+
+Get the parent info
+
+    >> hit.parent.query_id
+    => "lcl|1_0"
+ 
+Get the first Hsp
+
+    >> hsp = hit.hsps.first
+    >> hsp.hsp_num
+    => 1
+    >> hsp.bit_score
+    => 145.205
+    >> hsp.score
+    => 73
+    >> hsp.evalue
+    => 5.82208e-34
+    >> hsp.query_from
+    => 28
+    >> hsp.query_to
+    => 100
+    >> hsp.query_frame
+    => 1
+    >> hsp.hit_frame
+    => 1
+    >> hsp.identity
+    => 73
+    >> hsp.positive
+    => 73
+    >> hsp.align_len
+    => 73
+    >> hsp.qseq
+    => "AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG"
+    >> hsp.hseq
+    => "AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG"
+    >> hsp.midline
+    => "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+
+It is possible to use the XML element names, over methods. E.g.
+
+    >> hsp.field("Hsp_bit-score")
+    => "145.205"
+    >> hsp["Hsp_bit-score"]
+    => "145.205"
+
+Note that these are always String values.
+
+Fetch the next result (Iteration)
+
+    >> iter2 = blast.next
+    >> iter2.iter_num
+    >> 2 
+    >> iter2.query_id
+    => "lcl|2_0"
+
+etc. etc.
 
 For more examples see the files in ./spec
 
