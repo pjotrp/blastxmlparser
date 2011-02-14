@@ -2,17 +2,18 @@
 
 blastxmlparser is a fast big-data BLAST XML file parser. Rather than
 loading everything in memory, XML is parsed by BLAST query
-(Iteration). Not only has this the advantage of low memory use, it may
-also be faster when IO continues in parallel (disks read ahead).
+(Iteration). Not only has this the advantage of low memory use, it
+also shows results early, and it may be faster when IO continues in
+parallel (disk read-ahead).
 
 Next to the API, blastxmlparser comes as a command line utility, which
 can be used to filter results and requires no understanding of Ruby.
 
 == Performance
 
-XML parsing is expensive. blastxmlparser uses the Nokogiri C, or Java, XML
-parser, based on libxml2. Basically a DOM parser is used for subsections of a
-document, tests show this is faster than a SAX parser with Ruby callbacks.  To
+XML parsing is expensive. blastxmlparser uses the fast Nokogiri C, or Java, XML
+parsers, based on libxml2. Basically, a DOM parser is used for subsections of a
+document. Tests show this is faster than a SAX parser with Ruby callbacks.  To
 see why libxml2 based Nokogiri is fast, see
 http://www.rubyinside.com/ruby-xml-performance-benchmarks-1641.html and
 http://www.xml.com/lpt/a/1703. 
