@@ -75,7 +75,7 @@ To loop through a BLAST result:
 
 The next example parses XML using less memory
 
-    >> blast = XmlSplitterIterator.new(fn).to_enum
+    >> blast = Bio::Blast::XmlSplitterIterator.new(fn).to_enum
     >> iter = blast.next
     >> iter.iter_num
     >> 1
