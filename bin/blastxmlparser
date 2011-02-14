@@ -36,8 +36,6 @@ Print named fields where E-value < 0.001 and hit length > 100
 
   blastxmlparser -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 
-
-
 == URL
 
 The project lives at http://github.com/pjotrp/blastxmlparser. If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
@@ -127,8 +125,11 @@ begin
                      end
           if do_print
             if options.fields
-              print i
-              eval 'print options.fields.join("\t"),"\n"' 
+              print i,"\t"
+              options.fields.each do | f |
+                print eval(f),"\t"
+              end
+              print "\n"
             else
               print [i,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t"),"\n" 
             end
