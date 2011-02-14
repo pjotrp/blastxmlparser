@@ -75,6 +75,10 @@ opts = OptionParser.new do |o|
 
   o.separator ""
 
+  o.on("-n fields","--named fields",String, "Set named fields") do |s|
+    options.fields = s.split(/,/)
+  end
+  
   o.on("-e filter","--exec filter",String, "Execute filter") do |s|
     options.exec = s
   end
@@ -122,7 +126,12 @@ begin
                        true
                      end
           if do_print
-            print [i,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t"),"\n" if do_print
+            if options.fields
+              print i
+              eval 'print options.fields.join("\t"),"\n"' 
+            else
+              print [i,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t"),"\n" 
+            end
             i += 1
           end
         end
