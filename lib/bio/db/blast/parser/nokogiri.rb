@@ -7,7 +7,11 @@ module Bio
 
     module XPath
       def field name
-        @xml.xpath(name+"/text()").to_s
+        if @prefix
+          @xml.xpath(@prefix+name+'/text()').to_s
+        else
+          @xml.xpath(name+'/text()').to_s
+        end
       end
 
     end
@@ -122,13 +126,18 @@ EOM
                         'Iteration_query-len' => :query_len
 
 
-      def initialize iterator, parent
-        @xml = iterator
-        # p [:size,@xml.children.size]
-        #
-        # print @xml.to_s if @xml.children.size==1
-        p field('Iteration_iter-num')
+      def initialize iterator, parent, opts = { :prefix => nil }
         @parent = parent
+        @prefix = opts[:prefix]
+        @xml = if iterator.name == 'document'
+                 iterator.children.first
+               else
+                 iterator
+               end
+        name2 = @xml.name
+        raise "Error in BLAST XML, expected Iteration node, but got #{name2}" if name2 != 'Iteration'
+        # p [:iter,@prefix,'@@Iteratition_iter-num',field('Iteration_iter-num')]
+        # print @xml.to_s
       end
 
       def hits

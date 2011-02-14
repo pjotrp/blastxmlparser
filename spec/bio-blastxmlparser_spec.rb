@@ -97,9 +97,7 @@ describe Bio::Blast::XmlSplitterIterator do
   it "should parse with Nokogiri and XmlSplitter combined" do
     blast = XmlSplitterIterator.new(TESTFILE).to_enum
     iter1 = blast.next
-    print iter1.to_s
     iter2 = blast.next
-    print iter2.to_s
     iter1.query_id.should == "lcl|1_0"
     iter2.query_id.should == "lcl|2_0"
   end

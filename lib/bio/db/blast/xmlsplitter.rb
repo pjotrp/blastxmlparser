@@ -16,9 +16,8 @@ module Bio
           end
           # Return each Iteration as an XML DOM
           each_iteration(f) do | buf |
-            print "--->"
             iteration = Nokogiri::XML.parse(buf.join) { | cfg | cfg.noblanks }
-            yielder.yield NokogiriBlastIterator.new(iteration,self)
+            yielder.yield NokogiriBlastIterator.new(iteration,self,:prefix=>nil)
           end
         end
       end
@@ -27,6 +26,7 @@ module Bio
 
       def each_iteration f
         # b = ["<?xml version=\"1.0\"?>\n","<Iteration>\n"]
+        # b = []
         b = ["<Iteration>\n"]
         f.each_line do | line |
           b << line
