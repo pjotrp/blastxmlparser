@@ -18,6 +18,8 @@ USAGE = <<EOM
 
   bioblastxmlparser filename(s)
 
+    Use --help switch for more information
+
 == Examples
 
 Print result fields of iterations containing 'lcl', using a regex
@@ -35,6 +37,17 @@ It is also possible to use the XML element names directly
 Print named fields where E-value < 0.001 and hit length > 100
 
   blastxmlparser -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+
+  1       5.82208e-34     AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCT...
+  2       5.82208e-34     AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCT...
+  3       2.76378e-11     AATATGGTAGCTACAGAAACGGTAGTACACTCTTC     
+  4       1.13373e-13     CTAAACACAGGAGCATATAGGTTGGCAGGCAGGCAAAAT 
+  5       2.76378e-11     GAAGAGTGTACTACCGTTTCTGTAGCTACCATATT     
+  etc. etc.
+
+To use the low-mem version use
+
+  blastxmlparser --parser split -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 
 == URL
 
@@ -73,6 +86,10 @@ opts = OptionParser.new do |o|
 
   o.separator ""
 
+  o.on("-p name", "--parser name", "Use full|split parser (default full)") do |p|
+    options.parser = p.to_sym
+  end
+  
   o.on("-n fields","--named fields",String, "Set named fields") do |s|
     options.fields = s.split(/,/)
   end
@@ -113,7 +130,11 @@ begin
 
   ARGV.each do | fn |
     logger.info("XML parsing #{fn}")
-    n = Bio::Blast::XmlIterator.new(fn).to_enum
+    n = if options.parser == :split
+      Bio::Blast::XmlSplitterIterator.new(fn).to_enum
+    else
+      Bio::Blast::XmlIterator.new(fn).to_enum
+    end
     i = 1
     n.each do | iter |
       iter.each do | hit |

@@ -23,6 +23,26 @@ parallelization. When parsing a full BLAST result usually only a few
 fields are used. By using XPath queries only the relevant fields are
 queried.
 
+Parsing test/data/nt_example_blastn.m7 (file size 3.4Mb) 
+
+Nokogiri DOM (default)
+
+real    0m1.259s
+user    0m1.052s
+sys     0m0.144s
+
+Nokogiri split DOM
+
+real    0m1.713s
+user    0m1.444s
+sys     0m0.160s
+
+BioRuby ReXML DOM parser
+
+real    1m14.548s
+user    1m13.065s
+sys     0m0.472s
+
 == Install
 
   gem install bio-blastxmlparser

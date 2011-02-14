@@ -20,5 +20,9 @@ time sample/nokogiri_dom.rb > /dev/null
 echo ====
 echo Nokogiri split DOM
 time sample/nokogiri_split_dom.rb > /dev/null
+echo ====
+echo BioRuby ReXML DOM parser
+time sample/bioruby.rb > /dev/null
+ 
  
  
