@@ -10,20 +10,19 @@ can be used to filter results and requires no understanding of Ruby.
 
 == Performance
 
-XML parsing is expensive. blastxmlparser uses a C or Java XML parser,
-Nokogiri + libxml2. Basically a DOM parser is used for subsections of
-a document, tests show this is faster than a SAX parser with Ruby
-callbacks.  To see why libxml2 based Nokogiri is fast, see
-http://www.rubyinside.com/ruby-xml-performance-benchmarks-1641.html
-and http://www.xml.com/lpt/a/1703. 
+XML parsing is expensive. blastxmlparser uses the Nokogiri C, or Java, XML
+parser, based on libxml2. Basically a DOM parser is used for subsections of a
+document, tests show this is faster than a SAX parser with Ruby callbacks.  To
+see why libxml2 based Nokogiri is fast, see
+http://www.rubyinside.com/ruby-xml-performance-benchmarks-1641.html and
+http://www.xml.com/lpt/a/1703. 
 
-The parser is also designed with other optimizations in mind, such as
-lazy evaluation, only creating objects when required, and
-parallelization. When parsing a full BLAST result usually only a few
-fields are used. By using XPath queries only the relevant fields are
-queried.
+The parser is also designed with other optimizations, such as lazy evaluation,
+only creating objects when required, and (future) parallelization. When parsing
+a full BLAST result usually only a few fields are used. By using XPath queries
+only the relevant fields are queried.
 
-Parsing test/data/nt_example_blastn.m7 (file size 3.4Mb) 
+Timings for parsing test/data/nt_example_blastn.m7 (file size 3.4Mb) 
 
 Nokogiri DOM (default)
 
@@ -57,9 +56,30 @@ example on Debian:
 for more installation on other platforms see
 http://nokogiri.org/tutorials/installing_nokogiri.html. 
 
+== API
+
+To use the parser
+
+    >> require 'bio-blastxmlparser'
+    >> fn = 'test/data/nt_example_blastn.m7'
+    >> Bio::Blast::XmlIterator.new(fn).to_enum
+    >> n.each do | iter |
+    >>   iter.each do | hit |
+    >>     puts "Hits for " + report.query_def
+    >>     hit.each do | hsp |
+    >>     end
+    >>   end
+    >> end
+
+For more examples see the files in ./spec
+
 == Usage
 
-Usage: blastxmlparser [options] file(s)
+  blastxmlparser [options] file(s)
+
+    -p, --parser name                Use full|split parser (default full)
+    -n, --named fields               Set named fields
+    -e, --exec filter                Execute filter
 
         --logger filename            Log to file (default stderr)
         --trace options              Set log level (default INFO, see bio-logger)
@@ -69,6 +89,37 @@ Usage: blastxmlparser [options] file(s)
     -h, --help                       Show help and examples
 
   bioblastxmlparser filename(s)
+
+    Use --help switch for more information
+
+== Examples
+
+Print result fields of iterations containing 'lcl', using a regex
+
+  blastxmlparser -e 'iter.query_id=~/lcl/' test/data/nt_example_blastn.m7
+
+Print fields where bit_score > 145
+
+  blastxmlparser -e 'hsp.bit_score>145' test/data/nt_example_blastn.m7
+
+It is also possible to use the XML element names directly
+
+  blastxmlparser -e 'hsp["Hsp_bit-score"].to_i>145' test/data/nt_example_blastn.m7
+
+Print named fields where E-value < 0.001 and hit length > 100
+
+  blastxmlparser -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+
+  1       5.82208e-34     AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCT...
+  2       5.82208e-34     AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCT...
+  3       2.76378e-11     AATATGGTAGCTACAGAAACGGTAGTACACTCTTC     
+  4       1.13373e-13     CTAAACACAGGAGCATATAGGTTGGCAGGCAGGCAAAAT 
+  5       2.76378e-11     GAAGAGTGTACTACCGTTTCTGTAGCTACCATATT     
+  etc. etc.
+
+To use the low-mem version use
+
+  blastxmlparser --parser split -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 
 == URL
 

@@ -7,11 +7,16 @@ module Bio
 
     module XPath
       def field name
-        if @prefix
-          @xml.xpath(@prefix+name+'/text()').to_s
+        res = if @prefix
+          @xml.xpath(@prefix+name+'/text()')
         else
-          @xml.xpath(name+'/text()').to_s
+          @xml.xpath(name+'/text()')
         end
+        if res == nil
+          logger = Bio::Log::LoggerPlus['bio-blastxmlparser']
+          logger.warn("XML elemement <#{name}> has no content")
+        end
+        res.to_s
       end
 
     end
