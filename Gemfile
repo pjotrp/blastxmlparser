@@ -6,7 +6,7 @@ source "http://rubygems.org"
 # Runtime dependencies
 # gem "bio", ">= 1.3.1"
 gem "bio-logger", "> 0.8.0"
-gem "nokogiri", "> 1.4.4"
+gem "nokogiri", ">= 1.4.4"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
