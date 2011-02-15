@@ -45,6 +45,8 @@ Timings for parsing test/data/nt_example_blastn.m7 (file size 3.4Mb)
 
 == Install
 
+Important: the parser is written for Ruby >= 1.9.
+
   gem install bio-blastxmlparser
 
 Nokogiri XML parser is required. To install it,
@@ -78,7 +80,7 @@ The next example parses XML using less memory
     >> blast = Bio::Blast::XmlSplitterIterator.new(fn).to_enum
     >> iter = blast.next
     >> iter.iter_num
-    >> 1
+    => 1
     >> iter.query_id
     => "lcl|1_0"
 
