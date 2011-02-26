@@ -25,13 +25,13 @@ only the relevant fields are queried.
 
 Timings for parsing test/data/nt_example_blastn.m7 (file size 3.4Mb) 
 
-  Nokogiri DOM (default)
+  bio-blastxmlparser + Nokogiri DOM (default)
 
   real    0m1.259s
   user    0m1.052s
   sys     0m0.144s
 
-  Nokogiri split DOM
+  bio-blastxmlparser + Nokogiri split DOM
 
   real    0m1.713s
   user    0m1.444s
@@ -142,7 +142,7 @@ It is possible to use the XML element names, over methods. E.g.
     >> hsp["Hsp_bit-score"]
     => "145.205"
 
-Note that these are always String values.
+Note that, when using the element names, the results are always String values.
 
 Fetch the next result (Iteration)
 

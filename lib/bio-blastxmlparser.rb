@@ -10,6 +10,8 @@ else
 end
 require 'bio-logger'
 
+require 'enumerator'
+
 Bio::Log::LoggerPlus.new('bio-blastxmlparser')
 
 require 'bio/db/blast/parser/nokogiri'

@@ -1,8 +1,12 @@
+require 'enumerator' 
+
 module Bio
   module Blast
     # Reads a full XML result and splits it out into a buffer for each
     # Iteration (query result).
     class XmlSplitterIterator
+      # include Enumerable
+
       def initialize fn
         @fn = fn
       end
