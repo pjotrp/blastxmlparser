@@ -19,7 +19,7 @@ http://www.rubyinside.com/ruby-xml-performance-benchmarks-1641.html and
 http://www.xml.com/lpt/a/1703. 
 
 The parser is also designed with other optimizations, such as lazy evaluation,
-only creating objects when required, and (future) parallelization. When parsing
+only creating objects when required, and (in a future version) parallelization. When parsing
 a full BLAST result usually only a few fields are used. By using XPath queries
 only the relevant fields are queried.
 
@@ -75,7 +75,8 @@ To loop through a BLAST result:
     >>     end
     >>   end
 
-The next example parses XML using less memory
+The next example parses XML using less memory by using a Ruby
+Iterator
 
     >> blast = Bio::Blast::XmlSplitterIterator.new(fn).to_enum
     >> iter = blast.next
