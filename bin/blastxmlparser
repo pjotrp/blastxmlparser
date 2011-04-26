@@ -32,10 +32,6 @@ Print fields where bit_score > 145
 
 prints a tab delimited
 
-  BioRuby BLAST XML Parser 0.6.0 Copyright (C) 2011 Pjotr Prins <pjotr.prins@thebird.nl>
-  bio-logger loaded directly
-    INFO bio-blastxmlparser: XML parsing test/data/nt_example_blastn.m7
-    INFO bio-blastxmlparser: parsing (full) test/data/nt_example_blastn.m7
   1       1       lcl|1_0 lcl|I_74685     1       5.82208e-34
   2       1       lcl|1_0 lcl|I_1 1       5.82208e-34
   3       2       lcl|2_0 lcl|I_2 1       6.05436e-59

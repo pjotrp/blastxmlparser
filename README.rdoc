@@ -168,9 +168,12 @@ For more examples see the files in ./spec
 
 == Command line usage
 
+
+== Usage
   blastxmlparser [options] file(s)
 
     -p, --parser name                Use full|split parser (default full)
+        --output-fasta               Output FASTA
     -n, --named fields               Set named fields
     -e, --exec filter                Execute filter
 
@@ -185,7 +188,7 @@ For more examples see the files in ./spec
 
     Use --help switch for more information
 
-== Command line examples
+== Examples
 
 Print result fields of iterations containing 'lcl', using a regex
 
@@ -197,10 +200,6 @@ Print fields where bit_score > 145
 
 prints a tab delimited
 
-  BioRuby BLAST XML Parser 0.6.0 Copyright (C) 2011 Pjotr Prins <pjotr.prins@thebird.nl>
-  bio-logger loaded directly
-    INFO bio-blastxmlparser: XML parsing test/data/nt_example_blastn.m7
-    INFO bio-blastxmlparser: parsing (full) test/data/nt_example_blastn.m7
   1       1       lcl|1_0 lcl|I_74685     1       5.82208e-34
   2       1       lcl|1_0 lcl|I_1 1       5.82208e-34
   3       2       lcl|2_0 lcl|I_2 1       6.05436e-59
@@ -226,7 +225,18 @@ and hit length > 100. E.g.
   5       2.76378e-11     GAAGAGTGTACTACCGTTTCTGTAGCTACCATATT     
   etc. etc.
 
-prints the evalue and qseq columns.
+prints the evalue and qseq columns. To output FASTA use --output-fasta
+
+  blastxmlparser --output-fasta -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+
+which prints matching sequences, where the first field is the accession, followed
+by query iteration id, and hit_id. E.g.
+
+  >I_74685 1|lcl|1_0 lcl|I_74685 [57809 - 57666] (REVERSE SENSE) 
+  AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG
+  >I_1 1|lcl|1_0 lcl|I_1 [477 - 884] 
+  AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG
+  etc. etc.
 
 To use the low-mem (iterated slower) version of the parser use
 
