@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{bio-blastxmlparser}
-  s.version = "0.6.0"
+  s.version = "0.6.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pjotr Prins"]
-  s.date = %q{2011-02-14}
+  s.date = %q{2011-04-26}
   s.default_executable = %q{blastxmlparser}
   s.description = %q{Fast big data XML parser and library, written in Ruby}
   s.email = %q{pjotr.public01@thebird.nl}
