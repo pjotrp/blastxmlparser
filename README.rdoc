@@ -195,7 +195,7 @@ Print fields where bit_score > 145
 
   blastxmlparser -e 'hsp.bit_score>145' test/data/nt_example_blastn.m7
 
-which prints a tab delimited
+prints a tab delimited
 
   BioRuby BLAST XML Parser 0.6.0 Copyright (C) 2011 Pjotr Prins <pjotr.prins@thebird.nl>
   bio-logger loaded directly

@@ -30,11 +30,27 @@ Print fields where bit_score > 145
 
   blastxmlparser -e 'hsp.bit_score>145' test/data/nt_example_blastn.m7
 
-It is also possible to use the XML element names directly
+prints a tab delimited
+
+  BioRuby BLAST XML Parser 0.6.0 Copyright (C) 2011 Pjotr Prins <pjotr.prins@thebird.nl>
+  bio-logger loaded directly
+    INFO bio-blastxmlparser: XML parsing test/data/nt_example_blastn.m7
+    INFO bio-blastxmlparser: parsing (full) test/data/nt_example_blastn.m7
+  1       1       lcl|1_0 lcl|I_74685     1       5.82208e-34
+  2       1       lcl|1_0 lcl|I_1 1       5.82208e-34
+  3       2       lcl|2_0 lcl|I_2 1       6.05436e-59
+  4       3       lcl|3_0 lcl|I_3 1       2.03876e-56
+
+The second and third column show the BLAST iteration, and the others
+relate to the hits.
+
+As this is evaluated Ruby, it is also possible to use the XML element
+names directly
 
   blastxmlparser -e 'hsp["Hsp_bit-score"].to_i>145' test/data/nt_example_blastn.m7
 
-Print named fields where E-value < 0.001 and hit length > 100
+And it is possible to print (non default) named fields where E-value < 0.001 
+and hit length > 100. E.g.
 
   blastxmlparser -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 
@@ -45,7 +61,20 @@ Print named fields where E-value < 0.001 and hit length > 100
   5       2.76378e-11     GAAGAGTGTACTACCGTTTCTGTAGCTACCATATT     
   etc. etc.
 
-To use the low-mem version use
+prints the evalue and qseq columns. To output FASTA use --output-fasta
+
+  blastxmlparser --output-fasta -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+
+which prints matching sequences, where the first field is the accession, followed
+by query iteration id, and hit_id. E.g.
+
+  >I_74685 1|lcl|1_0 lcl|I_74685 [57809 - 57666] (REVERSE SENSE) 
+  AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG
+  >I_1 1|lcl|1_0 lcl|I_1 [477 - 884] 
+  AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG
+  etc. etc.
+
+To use the low-mem (iterated slower) version of the parser use
 
   blastxmlparser --parser split -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 
@@ -88,6 +117,10 @@ opts = OptionParser.new do |o|
 
   o.on("-p name", "--parser name", "Use full|split parser (default full)") do |p|
     options.parser = p.to_sym
+  end
+  
+  o.on("--output-fasta","Output FASTA") do |b|
+    options.output_fasta = true
   end
   
   o.on("-n fields","--named fields",String, "Set named fields") do |s|
@@ -145,14 +178,19 @@ begin
                        true
                      end
           if do_print
-            if options.fields
-              print i,"\t"
-              options.fields.each do | f |
-                print eval(f),"\t"
-              end
-              print "\n"
+            if options.output_fasta
+              print ">"+hit.accession+' '+iter.iter_num.to_s+'|'+iter.query_id+' '+hit.hit_id+' '+hit.hit_def+"\n"
+              print hsp.qseq+"\n"
             else
-              print [i,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t"),"\n" 
+              if options.fields
+                print i,"\t"
+                options.fields.each do | f |
+                  print eval(f),"\t"
+                end
+                print "\n"
+                else
+                  print [i,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t"),"\n" 
+              end
             end
             i += 1
           end
