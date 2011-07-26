@@ -3,6 +3,7 @@ coverage
 
 # rdoc generated
 rdoc
+rspec
 
 # yard generated
 doc
