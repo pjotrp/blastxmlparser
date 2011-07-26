@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{bio-blastxmlparser}
-  s.version = "0.6.1"
+  s.version = "1.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pjotr Prins"]
-  s.date = %q{2011-04-26}
+  s.date = %q{2011-07-26}
   s.default_executable = %q{blastxmlparser}
   s.description = %q{Fast big data XML parser and library, written in Ruby}
   s.email = %q{pjotr.public01@thebird.nl}
@@ -47,7 +47,7 @@ Gem::Specification.new do |s|
     "test/data/nt_example_blastn.m7",
     "timings.sh"
   ]
-  s.homepage = %q{http://github.com/pjotrp/bioruby-blastxmlparser}
+  s.homepage = %q{http://github.com/pjotrp/blastxmlparser}
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}

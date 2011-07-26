@@ -13,7 +13,7 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "bio-blastxmlparser"
-  gem.homepage = "http://github.com/pjotrp/bioruby-blastxmlparser"
+  gem.homepage = "http://github.com/pjotrp/blastxmlparser"
   gem.license = "MIT"
   gem.summary = %Q{BLAST XML parser}
   gem.description = %Q{Fast big data XML parser and library, written in Ruby}
@@ -39,8 +39,8 @@ end
 
 task :default => :spec
 
-require 'rake/rdoctask'
-Rake::RDocTask.new do |rdoc|
+require 'rdoc/task'
+RDoc::Task.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
