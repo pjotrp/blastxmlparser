@@ -1,4 +1,4 @@
-blastxmlparser is listed at http://biogems.info/
+blastxmlparser is listed at http://biogems.info
 
 = bio-blastxmlparser
 
