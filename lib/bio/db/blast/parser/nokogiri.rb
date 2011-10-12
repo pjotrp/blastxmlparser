@@ -68,6 +68,7 @@ module Bio
                         'Hsp_hit-frame'   => :hit_frame,
                         'Hsp_identity'    => :identity,
                         'Hsp_positive'    => :positive,
+                        'Hsp_gaps'        => :gaps,
                         'Hsp_align-len'   => :align_len
       MapXPath.define_f 'Hsp_bit-score'   => :bit_score,
                         'Hsp_evalue'      => :evalue
