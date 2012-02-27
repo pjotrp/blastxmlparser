@@ -4,15 +4,15 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{bio-blastxmlparser}
+  s.name = "bio-blastxmlparser"
   s.version = "1.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = [%q{Pjotr Prins}]
-  s.date = %q{2011-07-31}
-  s.description = %q{Fast big data XML parser and library, libxml2 based 50x faster than BioRuby}
-  s.email = %q{pjotr.public01@thebird.nl}
-  s.executables = [%q{blastxmlparser}]
+  s.authors = ["Pjotr Prins"]
+  s.date = "2012-02-27"
+  s.description = "Fast big data XML parser and library, libxml2 based 50x faster than BioRuby"
+  s.email = "pjotr.public01@thebird.nl"
+  s.executables = ["blastxmlparser"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.rdoc"
@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "bin/blastxmlparser",
+    "bio-blastxmlparser.gemspec",
     "lib/bio-blastxmlparser.rb",
     "lib/bio/db/blast/parser/nokogiri.rb",
     "lib/bio/db/blast/xmliterator.rb",
@@ -45,11 +46,15 @@ Gem::Specification.new do |s|
     "test/data/nt_example_blastn.m7",
     "timings.sh"
   ]
-  s.homepage = %q{http://github.com/pjotrp/blastxmlparser}
-  s.licenses = [%q{MIT}]
-  s.require_paths = [%q{lib}]
-  s.rubygems_version = %q{1.8.6}
-  s.summary = %q{Very fast BLAST XML parser and library for big data}
+  s.homepage = "http://github.com/pjotrp/blastxmlparser"
+  s.licenses = ["MIT"]
+  s.require_paths = ["lib"]
+  s.rubygems_version = "1.8.10"
+  s.summary = "Very fast BLAST XML parser and library for big data"
+  s.test_files = [
+    "spec/bio-blastxmlparser_spec.rb",
+    "spec/spec_helper.rb"
+  ]
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
@@ -57,19 +62,28 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<bio-logger>, [">= 1.0.0"])
       s.add_runtime_dependency(%q<nokogiri>, [">= 1.5.0"])
+      s.add_development_dependency(%q<rake>, [">= 0.9.2.2"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.15"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
+      s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
+      s.add_development_dependency(%q<rspec>, [">= 2.3.0"])
+      s.add_development_dependency(%q<rdoc>, [">= 2.4.2"])
     else
       s.add_dependency(%q<bio-logger>, [">= 1.0.0"])
       s.add_dependency(%q<nokogiri>, [">= 1.5.0"])
+      s.add_dependency(%q<rake>, [">= 0.9.2.2"])
       s.add_dependency(%q<bundler>, ["~> 1.0.15"])
-      s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
+      s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
+      s.add_dependency(%q<rspec>, [">= 2.3.0"])
+      s.add_dependency(%q<rdoc>, [">= 2.4.2"])
     end
   else
     s.add_dependency(%q<bio-logger>, [">= 1.0.0"])
     s.add_dependency(%q<nokogiri>, [">= 1.5.0"])
+    s.add_dependency(%q<rake>, [">= 0.9.2.2"])
     s.add_dependency(%q<bundler>, ["~> 1.0.15"])
-    s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
+    s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
+    s.add_dependency(%q<rspec>, [">= 2.3.0"])
+    s.add_dependency(%q<rdoc>, [">= 2.4.2"])
   end
 end
 
