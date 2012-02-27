@@ -37,7 +37,16 @@ Jeweler::RubygemsDotOrgTasks.new
 #   spec.rcov = true
 # end
 
-task :default => :spec
+task :default => :test
+
+require 'rake/testtask'
+Rake::TestTask.new(:test) do |test|
+  test.libs << 'lib' << 'test'
+  # test.pattern = 'test/**/test_*.rb'  # breaks in 1.9.3
+  test.test_files = Dir.glob("test/**/test_*.rb")
+  test.verbose = true
+  Kernel.system('rspec spec/*.rb')
+end
 
 require 'rdoc/task'
 RDoc::Task.new do |rdoc|
