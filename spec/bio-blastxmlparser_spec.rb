@@ -1,9 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 TESTFILE = "./test/data/nt_example_blastn.m7"
+include Bio::Blast
 
 describe "Bio::Blast::NokogiriBlastXml" do
-  include Bio::Blast
   before(:all) do
     n = NokogiriBlastXml.new(File.new(TESTFILE)).to_enum
     @iter1 = n.next
