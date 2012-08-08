@@ -46,6 +46,7 @@
               <Hsp_identity>73</Hsp_identity>
               <Hsp_positive>73</Hsp_positive>
               <Hsp_align-len>73</Hsp_align-len>
+              <Hsp_gaps>0</Hsp_gaps>
               <Hsp_qseq>AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG</Hsp_qseq>
               <Hsp_hseq>AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG</Hsp_hseq>
               <Hsp_midline>|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||</Hsp_midline>

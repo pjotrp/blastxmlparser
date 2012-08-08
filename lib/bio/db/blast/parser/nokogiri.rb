@@ -8,9 +8,9 @@ module Bio
     module XPath
       def field name
         res = if @prefix
-          @xml.xpath(@prefix+name+'/text()')
+          @xml.xpath(@prefix+name+'/text()').to_s
         else
-          @xml.xpath(name+'/text()')
+          @xml.xpath(name+'/text()').to_s
         end
         if res == nil
           logger = Bio::Log::LoggerPlus['bio-blastxmlparser']
@@ -68,6 +68,7 @@ module Bio
                         'Hsp_hit-frame'   => :hit_frame,
                         'Hsp_identity'    => :identity,
                         'Hsp_positive'    => :positive,
+                        'Hsp_gaps'        => :gaps,
                         'Hsp_align-len'   => :align_len
       MapXPath.define_f 'Hsp_bit-score'   => :bit_score,
                         'Hsp_evalue'      => :evalue
