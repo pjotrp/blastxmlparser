@@ -43,6 +43,7 @@ describe "Bio::Blast::NokogiriBlastXml" do
     hsp.identity.should == 73
     hsp.positive.should == 73
     hsp.align_len.should == 73
+    hsp.gaps.should == 0
     hsp.qseq.should == "AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG"
     hsp.hseq.should == "AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG"
     hsp.midline.should == "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
