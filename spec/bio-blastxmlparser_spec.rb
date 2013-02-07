@@ -1,9 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 TESTFILE = "./test/data/nt_example_blastn.m7"
-include Bio::Blast
+include Bio::BlastXMLParser
 
-describe "Bio::Blast::NokogiriBlastXml" do
+describe "Bio::BlastXMLParser::NokogiriBlastXml" do
   before(:all) do
     n = NokogiriBlastXml.new(File.new(TESTFILE)).to_enum
     @iter1 = n.next
@@ -75,8 +75,8 @@ describe "Bio::Blast::NokogiriBlastXml" do
   end
 end
 
-describe Bio::Blast::XmlIterator do
-  include Bio::Blast
+describe Bio::BlastXMLParser::XmlIterator do
+  include Bio::BlastXMLParser
   it "should parse with Nokogiri" do
     blast = XmlIterator.new(TESTFILE).to_enum
     iter1 = blast.next
@@ -86,8 +86,8 @@ describe Bio::Blast::XmlIterator do
   end
 end
 
-describe Bio::Blast::XmlSplitterIterator do
-  include Bio::Blast
+describe Bio::BlastXMLParser::XmlSplitterIterator do
+  include Bio::BlastXMLParser
   # it "should read a large file and yield Iterations" do
   #   s = XmlSplitter.new("./test/data/nt_example_blastn.m7")
   #   s.each do | result |

@@ -2,10 +2,9 @@
 #
 # BioRuby bio-blastxmlparser Plugin
 # Author:: Pjotr Prins
-# Copyright:: 2011
 # License:: MIT License
 #
-# Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>
+# Copyright (C) 2010-2013 Pjotr Prins <pjotr.prins@thebird.nl>
 
 rootpath = File.dirname(File.dirname(__FILE__))
 $: << File.join(rootpath,'lib')
@@ -160,9 +159,9 @@ begin
   ARGV.each do | fn |
     logger.info("XML parsing #{fn}")
     n = if options.parser == :split
-      Bio::Blast::XmlSplitterIterator.new(fn).to_enum
+      Bio::BlastXMLParser::XmlSplitterIterator.new(fn).to_enum
     else
-      Bio::Blast::XmlIterator.new(fn).to_enum
+      Bio::BlastXMLParser::XmlIterator.new(fn).to_enum
     end
     i = 1
     n.each do | iter |

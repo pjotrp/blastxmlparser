@@ -1,7 +1,7 @@
 require 'enumerator' 
 
 module Bio
-  module Blast
+  module BlastXMLParser
     # Reads a full XML result and splits it out into a buffer for each
     # Iteration (query result).
     class XmlSplitterIterator

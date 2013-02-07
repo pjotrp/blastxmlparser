@@ -3,7 +3,7 @@ require 'nokogiri'
 require 'enumerator'
 
 module Bio
-  module Blast
+  module BlastXMLParser
 
     module XPath
       def field name

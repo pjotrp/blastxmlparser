@@ -1,7 +1,7 @@
 
 
 module Bio
-  module Blast
+  module BlastXMLParser
 
     # Iterate a BLAST file yielding (lazy) results
     class XmlIterator
