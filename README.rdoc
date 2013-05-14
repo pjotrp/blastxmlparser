@@ -70,12 +70,16 @@ example on Debian:
   apt-get install libxslt-dev libxml2-dev
   gem install bio-blastxmlparser
 
-for more installation on other platforms see
-http://nokogiri.org/tutorials/installing_nokogiri.html. 
+Nokogiri balks when libxml2 or libxslt is missing on your system. In
+the worst case you'll have to provide build paths, as described on
+http://nokogiri.org/tutorials/installing_nokogiri.html. I have
+had success on wildly divergent systems, even building the libs in
+user land.
 
 == Command line usage
 
 === Usage
+
   blastxmlparser [options] file(s)
 
     -p, --parser name                Use full|split parser (default full)
