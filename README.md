@@ -118,15 +118,9 @@ Print result fields of iterations containing 'lcl', using a regex
   blastxmlparser -e 'iter.query_id=~/lcl/' test/data/nt_example_blastn.m7
 ```
 
-Print fields where bit_score > 145
-
-```sh
-  blastxmlparser -e 'hsp.bit_score>145' test/data/nt_example_blastn.m7
-```
-
 prints a tab delimited
 
-```
+```sh
   1       1       lcl|1_0 lcl|I_74685     1       5.82208e-34
   2       1       lcl|1_0 lcl|I_1 1       5.82208e-34
   3       2       lcl|2_0 lcl|I_2 1       6.05436e-59
@@ -141,6 +135,12 @@ names directly
 
 ```sh
   blastxmlparser -e 'hsp["Hsp_bit-score"].to_i>145' test/data/nt_example_blastn.m7
+```
+
+Or the shorter 
+
+```sh
+  blastxmlparser -e 'hsp.bit_score>145' test/data/nt_example_blastn.m7
 ```
 
 And it is possible to print (non default) named fields where E-value < 0.001 
@@ -166,7 +166,7 @@ prints the evalue and qseq columns. To output FASTA use --output-fasta
 which prints matching sequences, where the first field is the accession, followed
 by query iteration id, and hit_id. E.g.
 
-```
+```sh
   >I_74685 1|lcl|1_0 lcl|I_74685 [57809 - 57666] (REVERSE SENSE) 
   AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG
   >I_1 1|lcl|1_0 lcl|I_1 [477 - 884] 
@@ -174,11 +174,11 @@ by query iteration id, and hit_id. E.g.
   etc. etc.
 ```
 
+## Additional options
+
 To use the low-mem (iterated slower) version of the parser use
 
-```sh
   blastxmlparser --parser split -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
-```
 
 ## API (Ruby library)
 
