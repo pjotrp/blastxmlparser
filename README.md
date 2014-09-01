@@ -23,18 +23,20 @@ can be used to filter results and requires no understanding of Ruby.
 
 ## Performance
 
-XML parsing is expensive. blastxmlparser uses the fast Nokogiri C, or Java, XML
-parsers, based on libxml2. Basically, a DOM parser is used for subsections of a
-document. Tests show this is faster than a SAX parser with Ruby callbacks.  To
-see why libxml2 based Nokogiri is fast, see
-http://www.rubyinside.com/ruby-xml-performance-benchmarks-1641.html and
-http://www.xml.com/lpt/a/1703. 
+XML parsing is expensive. blastxmlparser can use the fast Nokogiri C, or
+Java XML parsers, based on libxml2. Basically, a DOM parser is used
+after splitting the BLAST XML document into subsections.
+Tests show this is faster than a SAX
+parser with Ruby callbacks.  To see why libxml2 based Nokogiri is
+fast, see this
+[benchmark](http://www.rubyinside.com/ruby-xml-performance-benchmarks-1641.html)
+and [xml.com](http://www.xml.com/lpt/a/1703). 
 
-The parser is also designed with other optimizations, such as lazy
-evaluation, i.e. only creating objects when required, and (in a future
-version) parallelization. When parsing a full BLAST result usually
-only a few fields are used. By using XPath queries only the relevant
-fields are queried.
+Blastxmlparser is designed with other optimizations, such as lazy
+evaluation, i.e., only creating objects when required, and (in a
+future version) parallelization. When parsing a full BLAST result
+usually only a few fields are used. By using XPath queries the parser
+makes sure only the relevant fields are queried.
 
 Timings for parsing test/data/nt_example_blastn.m7 (file size 3.4Mb) 
 
@@ -64,7 +66,7 @@ Timings for parsing test/data/nt_example_blastn.m7 (file size 3.4Mb)
   gem install bio-blastxmlparser
 ```
 
-Important: the parser is written for Ruby >= 1.9. You can check with
+Important: the parser is written for Ruby >= 1.9. Check with
 
 ```sh
   ruby -v
@@ -80,15 +82,13 @@ example on Debian:
   gem install bio-blastxmlparser
 ```
 
-Nokogiri balks when libxml2 or libxslt is missing on your system. In
-the worst case you'll have to provide build paths, as described on
-http://nokogiri.org/tutorials/installing_nokogiri.html. I have
-had success on wildly divergent systems, even building the libs in
-user land.
+Nokogiri balks when libxml2 or libxslt is missing on your system (or
+may install something automatically). In the worst case you'll have to
+provide build paths, as described [here](http://nokogiri.org/tutorials/installing_nokogiri.html).
 
 ## Command line usage
 
-##= Usage
+### Usage
 
 ```
   blastxmlparser [options] file(s)
@@ -110,7 +110,7 @@ user land.
     Use --help switch for more information
 ```
 
-##= Examples
+### Examples
 
 Print result fields of iterations containing 'lcl', using a regex
 
