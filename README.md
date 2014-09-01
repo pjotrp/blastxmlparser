@@ -228,7 +228,9 @@ which I think is pretty good!
 
 To use the low-mem (iterated slower) version of the parser use
 
+```sh
   blastxmlparser --parser split -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+```
 
 ## API (Ruby library)
 
