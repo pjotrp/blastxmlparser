@@ -177,14 +177,47 @@ by query iteration id, and hit_id. E.g.
 ## Modify output
 
 To have more output options blastxmlparser can use an [ERB
-template](http://www.stuartellis.eu/articles/erb/)
-for every match. This is a very flexible option that can output
-textual formats such as JSON, HTML and RDF. An RDF example is
-provided in ./templates/rdf.erb. Try
+template](http://www.stuartellis.eu/articles/erb/) for every match. This is a
+very flexible option that can output textual formats such as JSON, YAML, HTML
+and RDF. Examples are provided in
+[./templates](https://github.com/pjotrp/bioruby-vcf/templates/). A JSON
+template could be
+
+```Javascript
+{ "<%= hit.parent.query_def %>": {
+  "num":      <%= hit.hit_num %>,
+  "id":       "<%= hit.hit_id %>",
+  "len":      <%= hit.len %>,
+  "E-value":  <%= hsp.evalue %>,
+  "bitscore": <%= hsp.bit_score %>,
+  "qseq":     "<%= hsp.qseq %>",
+  "midline":  "<%= hsp.midline %>", 
+  "hseq":     "<%= hsp.hseq %>",
+};
+```
+
+Run it with
 
 ```sh
-  blastxmlparser --template template/rdf.erb -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+  blastxmlparser --template template/json.erb -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 ```
+
+and get
+
+```Javascript
+{ "B0511.9d gene=WBGene00015235": {
+  "num":      5,
+  "id":       "gi|268566471|ref|XP_002639731.1|",
+  "len":      199,
+  "E-value":  1.72502e-22,
+  "bitscore": 96.6709,
+  "qseq":     "MSMLRRPLTQLELSVI------------------VPKCXXXXXXXXXXXXQSEPPRGITRRNLRSADRKNRDVPGPSTGECTRTSIAPNRCEMSFTEVQ-TLTSARTPVAAPTLTLSTPVNPVSSAEMLX----XXXXXXXXXXXASRSGDNDSPLLFNAYDTPQQ--GINXXXXXXXXXXXXXNAHLYAXXXXXXXXXXXXXXXXRSHRH",
+  "midline":  "MSMLRRPLTQLEL                       K             QSEP  GI++RNLRSADR+ +DVPG ++GE  +           FT+   +++SARTPV+  ++ LSTPVNP SS EM+                 SR  + D PL+FNAYDTPQQ  G +             NAHLY+                RS RH", 
+  "hseq":     "MSMLRRPLTQLELCEDDIQWLSEQLAKKETGFEDEVKYEVMDVDEDEPMDQSEPTGGISKRNLRSADRRKKDVPG-TSGEGAQ-----------FTDQGLSISSARTPVSGASVNLSTPVNPSSSNEMMALPPPVRLARAGRRQRDSRVVNGDVPLMFNAYDTPQQPAGGSNGSPTPSDSPESPNAHLYSTPINPTSSSGGPSSNTRSQRH",
+};
+```
+
+which I think is pretty good!
 
 ## Additional options
 
