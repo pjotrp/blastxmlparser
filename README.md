@@ -174,6 +174,18 @@ by query iteration id, and hit_id. E.g.
   etc. etc.
 ```
 
+## Modify output
+
+To have more output options blastxmlparser can use an [ERB
+template](http://www.stuartellis.eu/articles/erb/)
+for every match. This is a very flexible option that can output
+textual formats such as JSON, HTML and RDF. An RDF example is
+provided in ./templates/rdf.erb. Try
+
+```sh
+  blastxmlparser --template template/rdf.erb -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+```
+
 ## Additional options
 
 To use the low-mem (iterated slower) version of the parser use

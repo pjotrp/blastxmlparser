@@ -66,6 +66,7 @@ opts = OptionParser.new do |o|
   end
   
   o.on("-t erb","--template erb",String, "Use ERB template for output") do |s|
+    require 'erb'
     options.template = s
   end
   
@@ -99,6 +100,12 @@ begin
   Bio::Log::CLI.configure('bio-blastxmlparser')
   logger = Bio::Log::LoggerPlus['bio-blastxmlparser']
 
+  if options[:template]
+    fn = options.template
+    raise "No template #{fn}!" if not File.exist?(fn)
+    template = ERB.new(File.read(fn))
+  end
+
   ARGV.each do | fn |
     logger.info("XML parsing #{fn}")
     n = if options.parser == :split
@@ -116,10 +123,13 @@ begin
                        true
                      end
           if do_print
-            if options.output_fasta
+            if template
+              print template.result(binding)
+            elsif options.output_fasta
               print ">"+hit.accession+' '+iter.iter_num.to_s+'|'+iter.query_id+' '+hit.hit_id+' '+hit.hit_def+"\n"
               print hsp.qseq+"\n"
             else
+              # Default output
               if options.fields
                 print i,"\t"
                 options.fields.each do | f |
