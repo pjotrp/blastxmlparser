@@ -116,16 +116,21 @@ opts = OptionParser.new do |o|
     options.parser = p.to_sym
   end
   
-  o.on("--output-fasta","Output FASTA") do |b|
-    options.output_fasta = true
+  o.on("-e filter","--exec filter",String, "Evaluate filter") do |s|
+    options.exec = s
   end
-  
+
+  o.separator ""
+
   o.on("-n fields","--named fields",String, "Print named fields") do |s|
     options.fields = s.split(/,/)
   end
+   o.on("--output-fasta","Output FASTA") do |b|
+    options.output_fasta = true
+  end
   
-  o.on("-e filter","--exec filter",String, "Evaluate filter") do |s|
-    options.exec = s
+  o.on("-t erb","--template erb",String, "Use ERB template for output") do |s|
+    options.template = s
   end
   
   o.separator ""
