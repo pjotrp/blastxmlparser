@@ -11,23 +11,19 @@ $: << File.join(rootpath,'lib')
 
 BLASTXML_VERSION = File.new(File.join(rootpath,'VERSION')).read.chomp
 
-$stderr.print "BioRuby BLAST XML Parser "+BLASTXML_VERSION+" Copyright (C) 2014 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
+$stderr.print "BLAST XML Parser "+BLASTXML_VERSION+" Copyright (C) 2014 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
 
 USAGE = <<EOM
 
-  bioblastxmlparser filename(s)
+  blastxmlparser filename(s)
 
     Use --help switch for more information
 
-== Examples
+## Examples
 
 Print result fields of iterations containing 'lcl', using a regex
 
   blastxmlparser -e 'iter.query_id=~/lcl/' test/data/nt_example_blastn.m7
-
-Print fields where bit_score > 145
-
-  blastxmlparser -e 'hsp.bit_score>145' test/data/nt_example_blastn.m7
 
 prints a tab delimited
 
@@ -43,6 +39,10 @@ As this is evaluated Ruby, it is also possible to use the XML element
 names directly
 
   blastxmlparser -e 'hsp["Hsp_bit-score"].to_i>145' test/data/nt_example_blastn.m7
+
+Or the shorter 
+
+  blastxmlparser -e 'hsp.bit_score>145' test/data/nt_example_blastn.m7
 
 And it is possible to print (non default) named fields where E-value < 0.001 
 and hit length > 100. E.g.
@@ -69,17 +69,19 @@ by query iteration id, and hit_id. E.g.
   AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG
   etc. etc.
 
+## Additional options
+
 To use the low-mem (iterated slower) version of the parser use
 
   blastxmlparser --parser split -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 
-== URL
+## URL
 
 The project lives at http://github.com/pjotrp/blastxmlparser. If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
 
-== Copyright
+## Copyright
 
-Copyright (c) 2011 Pjotr Prins under the MIT licence.  See LICENSE.txt and http://www.opensource.org/licenses/mit-license.html for further details.
+Copyright (c) 2011-2014 Pjotr Prins under the MIT licence.  See LICENSE.txt and http://www.opensource.org/licenses/mit-license.html for further details.
 
 EOM
 
@@ -118,11 +120,11 @@ opts = OptionParser.new do |o|
     options.output_fasta = true
   end
   
-  o.on("-n fields","--named fields",String, "Set named fields") do |s|
+  o.on("-n fields","--named fields",String, "Print named fields") do |s|
     options.fields = s.split(/,/)
   end
   
-  o.on("-e filter","--exec filter",String, "Execute filter") do |s|
+  o.on("-e filter","--exec filter",String, "Evaluate filter") do |s|
     options.exec = s
   end
   
