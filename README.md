@@ -2,12 +2,17 @@ blastxmlparser is listed at http://biogems.info
 
 # bio-blastxmlparser
 
-blastxmlparser is a very fast big-data BLAST XML file parser, which can be
-used as command line utility, or as a Ruby library. Rather than
-loading everything in memory, XML is parsed by BLAST query
-(Iteration). Not only has this the advantage of low memory use, it
-also shows results early, and it may be faster when IO continues in
-parallel (disk read-ahead).
+blastxmlparser is a very fast big-data BLAST XML file parser, which can be used
+as command line utility. Use blastxmlparser to:
+
+* Parse BLAST XML
+* Filter output
+* Generate FASTA, JSON, YAML, RDF, HTML, tabular output etc.
+
+Rather than loading everything in memory, XML is parsed by BLAST query
+(Iteration). Not only has this the advantage of low memory use, it also shows
+results early, and it may be faster when IO continues in parallel (disk
+read-ahead).
 
 Next to the API, blastxmlparser comes as a command line utility, which
 can be used to filter results and requires no understanding of Ruby.
