@@ -1,6 +1,6 @@
 blastxmlparser is listed at http://biogems.info
 
-= bio-blastxmlparser
+# bio-blastxmlparser
 
 blastxmlparser is a very fast big-data BLAST XML file parser, which can be
 used as command line utility, or as a Ruby library. Rather than
@@ -12,14 +12,16 @@ parallel (disk read-ahead).
 Next to the API, blastxmlparser comes as a command line utility, which
 can be used to filter results and requires no understanding of Ruby.
 
-= Quick start
+# Quick start
 
+```sh
   gem install bio-blastxmlparser
   blastxmlparser --help
+```
 
 (see Installation, below, if it does not work)
 
-== Performance
+## Performance
 
 XML parsing is expensive. blastxmlparser uses the fast Nokogiri C, or Java, XML
 parsers, based on libxml2. Basically, a DOM parser is used for subsections of a
@@ -36,6 +38,7 @@ fields are queried.
 
 Timings for parsing test/data/nt_example_blastn.m7 (file size 3.4Mb) 
 
+```
   bio-blastxmlparser + Nokogiri DOM (default)
 
   real    0m1.259s
@@ -53,22 +56,29 @@ Timings for parsing test/data/nt_example_blastn.m7 (file size 3.4Mb)
   real    1m14.548s
   user    1m13.065s
   sys     0m0.472s
+```
 
-== Install
+## Install
 
+```sh
   gem install bio-blastxmlparser
+```
 
 Important: the parser is written for Ruby >= 1.9. You can check with
 
+```sh
   ruby -v
   gem env
+```
 
 Nokogiri XML parser is required. To install it,
 the libxml2 libraries and headers need to be installed first, for
 example on Debian:
 
+```sh
   apt-get install libxslt-dev libxml2-dev
   gem install bio-blastxmlparser
+```
 
 Nokogiri balks when libxml2 or libxslt is missing on your system. In
 the worst case you'll have to provide build paths, as described on
@@ -76,10 +86,11 @@ http://nokogiri.org/tutorials/installing_nokogiri.html. I have
 had success on wildly divergent systems, even building the libs in
 user land.
 
-== Command line usage
+## Command line usage
 
-=== Usage
+##= Usage
 
+```
   blastxmlparser [options] file(s)
 
     -p, --parser name                Use full|split parser (default full)
@@ -97,23 +108,30 @@ user land.
   bioblastxmlparser filename(s)
 
     Use --help switch for more information
+```
 
-=== Examples
+##= Examples
 
 Print result fields of iterations containing 'lcl', using a regex
 
+```sh
   blastxmlparser -e 'iter.query_id=~/lcl/' test/data/nt_example_blastn.m7
+```
 
 Print fields where bit_score > 145
 
+```sh
   blastxmlparser -e 'hsp.bit_score>145' test/data/nt_example_blastn.m7
+```
 
 prints a tab delimited
 
+```
   1       1       lcl|1_0 lcl|I_74685     1       5.82208e-34
   2       1       lcl|1_0 lcl|I_1 1       5.82208e-34
   3       2       lcl|2_0 lcl|I_2 1       6.05436e-59
   4       3       lcl|3_0 lcl|I_3 1       2.03876e-56
+```
 
 The second and third column show the BLAST iteration, and the others
 relate to the hits.
@@ -121,11 +139,14 @@ relate to the hits.
 As this is evaluated Ruby, it is also possible to use the XML element
 names directly
 
+```sh
   blastxmlparser -e 'hsp["Hsp_bit-score"].to_i>145' test/data/nt_example_blastn.m7
+```
 
 And it is possible to print (non default) named fields where E-value < 0.001 
 and hit length > 100. E.g.
 
+```sh
   blastxmlparser -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 
   1       5.82208e-34     AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCT...
@@ -134,28 +155,36 @@ and hit length > 100. E.g.
   4       1.13373e-13     CTAAACACAGGAGCATATAGGTTGGCAGGCAGGCAAAAT 
   5       2.76378e-11     GAAGAGTGTACTACCGTTTCTGTAGCTACCATATT     
   etc. etc.
+```
 
 prints the evalue and qseq columns. To output FASTA use --output-fasta
 
+```sh
   blastxmlparser --output-fasta -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+```
 
 which prints matching sequences, where the first field is the accession, followed
 by query iteration id, and hit_id. E.g.
 
+```
   >I_74685 1|lcl|1_0 lcl|I_74685 [57809 - 57666] (REVERSE SENSE) 
   AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG
   >I_1 1|lcl|1_0 lcl|I_1 [477 - 884] 
   AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG
   etc. etc.
+```
 
 To use the low-mem (iterated slower) version of the parser use
 
+```sh
   blastxmlparser --parser split -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+```
 
-== API (Ruby library)
+## API (Ruby library)
 
 To loop through a BLAST result:
 
+```ruby
     >> require 'bio-blastxmlparser'
     >> fn = 'test/data/nt_example_blastn.m7'
     >>   n = Bio::BlastXMLParser::XmlIterator.new(fn).to_enum
@@ -167,19 +196,23 @@ To loop through a BLAST result:
     >>       end
     >>     end
     >>   end
+```
 
 The next example parses XML using less memory by using a Ruby
 Iterator
 
+```ruby
     >> blast = Bio::BlastXMLParser::XmlSplitterIterator.new(fn).to_enum
     >> iter = blast.next
     >> iter.iter_num
     => 1
     >> iter.query_id
     => "lcl|1_0"
+```
 
 Get the first hit
 
+```ruby
     >> hit = iter.hits.first
     >> hit.hit_num
     => 1
@@ -191,14 +224,18 @@ Get the first hit
     => "I_74685"
     >> hit.len
     => 144
+```
 
 Get the parent info
 
+```ruby
     >> hit.parent.query_id
     => "lcl|1_0"
- 
+```
+
 Get the first Hsp
 
+```ruby
     >> hsp = hit.hsps.first
     >> hsp.hsp_num
     => 1
@@ -228,6 +265,7 @@ Get the first Hsp
     => "AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG"
     >> hsp.midline
     => "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+```
 
 Unlike BioRuby, this module uses the actual element names in the XML
 definition, to avoid confusion (if anyone wants a translation,
@@ -236,30 +274,34 @@ feel free to contribute an adaptor).
 It is also possible to use the XML element names as Strings, rather
 than methods. E.g.
 
+```ruby
     >> hsp.field("Hsp_bit-score")
     => "145.205"
     >> hsp["Hsp_bit-score"]
     => "145.205"
+```
 
 Note that, when using the element names, the results are always String values.
 
 Fetch the next result (Iteration)
 
+```ruby
     >> iter2 = blast.next
     >> iter2.iter_num
     >> 2 
     >> iter2.query_id
     => "lcl|2_0"
+```
 
 etc. etc.
 
 For more examples see the files in ./spec
 
-== URL
+## URL
 
 The project lives at http://github.com/pjotrp/blastxmlparser. If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
 
-== Copyright
+## Copyright
 
-Copyright (c) 2011,2012 Pjotr Prins under the MIT licence.  See LICENSE.txt and http://www.opensource.org/licenses/mit-license.html for further details.
+Copyright (c) 2011-2014 Pjotr Prins under the MIT licence.  See LICENSE.txt and http://www.opensource.org/licenses/mit-license.html for further details.
 
