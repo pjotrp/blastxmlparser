@@ -4,14 +4,14 @@
 # Author:: Pjotr Prins
 # License:: MIT License
 #
-# Copyright (C) 2010-2013 Pjotr Prins <pjotr.prins@thebird.nl>
+# Copyright (C) 2010-2014 Pjotr Prins <pjotr.prins@thebird.nl>
 
 rootpath = File.dirname(File.dirname(__FILE__))
 $: << File.join(rootpath,'lib')
 
 BLASTXML_VERSION = File.new(File.join(rootpath,'VERSION')).read.chomp
 
-$stderr.print "BioRuby BLAST XML Parser "+BLASTXML_VERSION+" Copyright (C) 2011 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
+$stderr.print "BioRuby BLAST XML Parser "+BLASTXML_VERSION+" Copyright (C) 2014 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
 
 USAGE = <<EOM
 
