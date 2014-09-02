@@ -202,7 +202,7 @@ template could be
 To get JSON, run it with
 
 ```sh
-  blastxmlparser --template template/json.erb -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+  blastxmlparser --template template/blast2json.erb -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 ```
 
 ```Javascript
@@ -221,7 +221,7 @@ To get JSON, run it with
 Likewise, using the RDF template
 
 ```sh
-  blastxmlparser --template template/rdf.erb -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+  blastxmlparser --template template/blast2rdf.erb -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 ```
 
 ```ruby
@@ -233,14 +233,13 @@ Likewise, using the RDF template
   :accession   "Minc02032",
   :id          "lcl|Minc02032",
   :len         147,
-  :E-value     8.1089e-12,
   :identity    60,
   :align_len   69,
   :bitscore    69.8753,
   :qseq        "ATGGGAGATGGAATTGAACCGTCATGGAAAGGGCCCAAACCGAAGCACAACCGACTGTGCCACCATCCA",
   :midline     "|||||||||||||||||||| |||||||| |       |||||||||||||||||||||||||||||||", 
   :hseq        "ATGGGAGATGGAATTGAACCATCATGGAATG-------ACCGAAGCACAACCGACTGTGCCACCATCCA",
-  :evalue   8.1089e-12 .
+  :evalue      8.1089e-12 .
 ```
 
 ## Additional options
