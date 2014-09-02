@@ -1,4 +1,4 @@
-blastxmlparser is listed at http://biogems.info
+[![Build Status](https://travis-ci.org/pjotrp/blastxmlparser.svg?branch=master)](https://travis-ci.org/pjotrp/blastxmlparser)
 
 # bio-blastxmlparser
 
@@ -201,13 +201,11 @@ template could be
 };
 ```
 
-Run it with
+To get JSON, run it with
 
 ```sh
   blastxmlparser --template template/json.erb -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 ```
-
-and get
 
 ```Javascript
 { "B0511.9d gene=WBGene00015235": {
@@ -228,7 +226,7 @@ Likewise, using the RDF template
   blastxmlparser --template template/rdf.erb -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 ```
 
-```turtle
+```ruby
 :Minc_Contig50_77_42056___42484_1_64492  :query  :Minc_Contig50_77_42056___42484_1_64492_23
 :Minc_Contig50_77_42056___42484_1_64492_23
   :query_id    "lcl|30_0",
@@ -375,6 +373,8 @@ For more examples see the files in ./spec
 ## URL
 
 The project lives at http://github.com/pjotrp/blastxmlparser. If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
+
+blastxmlparser is listed at http://biogems.info
 
 ## Copyright
 
