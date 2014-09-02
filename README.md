@@ -99,9 +99,11 @@ provide build paths, as described [here](http://nokogiri.org/tutorials/installin
   blastxmlparser [options] file(s)
 
     -p, --parser name                Use full|split parser (default full)
+    -e, --exec filter                Evaluate filter
+
+    -n, --named fields               Print named fields
         --output-fasta               Output FASTA
-    -n, --named fields               Set named fields
-    -e, --exec filter                Execute filter
+    -t, --template erb               Use ERB template for output
 
         --logger filename            Log to file (default stderr)
         --trace options              Set log level (default INFO, see bio-logger)
@@ -109,10 +111,6 @@ provide build paths, as described [here](http://nokogiri.org/tutorials/installin
     -v, --verbose                    Run verbosely
         --debug                      Show debug messages
     -h, --help                       Show help and examples
-
-  bioblastxmlparser filename(s)
-
-    Use --help switch for more information
 ```
 
 ### Examples
