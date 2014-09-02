@@ -1,1 +1,21 @@
-:<%= hit.accession %>       blast:evalue   <%= hsp.evalue %> .
+<%
+  blastid = Turtle::mangle_identifier(hit.parent.query_def) 
+  id = blastid+'_'+hit.hit_num.to_s
+%>
+:<%= blastid %>  :query  :<%= id %>
+:<%= id %>
+  :query_id    "<%= hit.parent.query_id %>",
+  :query_def   "<%= hit.parent.query_def %>",
+  :num         <%= hit.hit_num %>,
+  :accession   "<%= hit.accession %>",
+  :id          "<%= hit.hit_id %>",
+  :len         <%= hit.len %>,
+  :E-value     <%= hsp.evalue %>,
+  :identity    <%= hsp.identity %>,
+  :align_len   <%= hsp.align_len %>,
+  :bitscore    <%= hsp.bit_score %>,
+  :qseq        "<%= hsp.qseq %>",
+  :midline     "<%= hsp.midline %>", 
+  :hseq        "<%= hsp.hseq %>",
+  :evalue   <%= hsp.evalue %> .
+

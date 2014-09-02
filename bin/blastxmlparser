@@ -101,6 +101,7 @@ begin
   logger = Bio::Log::LoggerPlus['bio-blastxmlparser']
 
   if options[:template]
+    include BioRdf
     fn = options.template
     raise "No template #{fn}!" if not File.exist?(fn)
     template = ERB.new(File.read(fn))

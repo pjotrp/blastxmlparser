@@ -222,7 +222,30 @@ and get
 };
 ```
 
-which I think is pretty good!
+Likewise, using the RDF template
+
+```sh
+  blastxmlparser --template template/rdf.erb -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+```
+
+```turtle
+:Minc_Contig50_77_42056___42484_1_64492  :query  :Minc_Contig50_77_42056___42484_1_64492_23
+:Minc_Contig50_77_42056___42484_1_64492_23
+  :query_id    "lcl|30_0",
+  :query_def   "Minc_Contig50_77 [42056 - 42484] 1 64492",
+  :num         23,
+  :accession   "Minc02032",
+  :id          "lcl|Minc02032",
+  :len         147,
+  :E-value     8.1089e-12,
+  :identity    60,
+  :align_len   69,
+  :bitscore    69.8753,
+  :qseq        "ATGGGAGATGGAATTGAACCGTCATGGAAAGGGCCCAAACCGAAGCACAACCGACTGTGCCACCATCCA",
+  :midline     "|||||||||||||||||||| |||||||| |       |||||||||||||||||||||||||||||||", 
+  :hseq        "ATGGGAGATGGAATTGAACCATCATGGAATG-------ACCGAAGCACAACCGACTGTGCCACCATCCA",
+  :evalue   8.1089e-12 .
+```
 
 ## Additional options
 

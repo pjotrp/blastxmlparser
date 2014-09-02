@@ -17,3 +17,4 @@ Bio::Log::LoggerPlus.new('bio-blastxmlparser')
 require 'bio/db/blast/parser/nokogiri'
 require 'bio/db/blast/xmlsplitter'
 require 'bio/db/blast/xmliterator'
+require 'bio/writers/rdf'
