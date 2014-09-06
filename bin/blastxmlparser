@@ -127,15 +127,18 @@ begin
     chunks = []
     chunks_count = 0
     NUM_CHUNKS=1000
-    n.each do | iter |
-      chunks << iter
-      chunks_count += 1
-      if chunks.size > NUM_CHUNKS
-        collect = Parallel.map_with_index(chunks, :in_processes => options.threads) do | iter,i |
+    iter_count = 0
+    process = lambda { |chunks| 
+        collect = 
+          Parallel.map_with_index(chunks, :in_processes => options.threads) do | iter,i |
           res = []
           line_count = 0
+          hit_count = 0
           iter.each do | hit |
+            hit_count += 1
+            hsp_count = 0
             hit.each do | hsp |
+              hsp_count += 1
               do_print = if options.filter
                            eval(options.filter)
                          else
@@ -158,22 +161,30 @@ begin
                     end
                     print "\n"
                   else
-                    res << [num,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t")+"\n"
+                    res << [iter_count+i+1,hit_count,hsp_count,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t")+"\n"
                   end
                 end
               end
             end
           end
           res
-        end
+        end # end parallel
         collect.each do | result |
           result.each do | line |
             print line
           end
         end
+        iter_count += chunks.size
+      }
+    n.each do | iter |
+      chunks << iter
+      chunks_count += 1
+      if chunks.size > NUM_CHUNKS
+        process.call(chunks)
         chunks = []
       end
     end
+    process.call(chunks)
   end
 rescue OptionParser::InvalidOption => e
   opts[:invalid_argument] = e.message
