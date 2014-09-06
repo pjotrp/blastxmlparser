@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "bio-blastxmlparser"
-  s.version = "1.1.2"
+  s.version = "2.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pjotr Prins"]
-  s.date = "2014-09-02"
+  s.date = "2014-09-06"
   s.description = "Fast big data BLAST XML parser and library; this libxml2 based version is 50x faster than BioRuby and comes with a nice CLI"
   s.email = "pjotr.public01@thebird.nl"
   s.executables = ["blastxmlparser"]
@@ -42,8 +42,9 @@ Gem::Specification.new do |s|
     "sample/nokogiri_split_dom.rb",
     "spec/bio-blastxmlparser_spec.rb",
     "spec/spec_helper.rb",
-    "template/json.erb",
-    "template/rdf.erb",
+    "template/blast2json.erb",
+    "template/blast2rdf-minimal.erb",
+    "template/blast2rdf.erb",
     "test/data/aa_example.fasta",
     "test/data/aa_example_blastp.m7",
     "test/data/nt_example.fasta",
@@ -54,14 +55,14 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "2.0.3"
-  s.summary = "Very fast BLAST XML to RDF/HTML/JSON/YAML/csv transformer"
+  s.summary = "Very fast parallel BLAST XML to RDF/HTML/JSON/YAML/csv transformer"
 
   if s.respond_to? :specification_version then
     s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<bio-logger>, [">= 0"])
-      s.add_runtime_dependency(%q<nokogiri>, ["~> 1.6.0"])
+      s.add_runtime_dependency(%q<nokogiri>, ["~> 1.6.3"])
       s.add_development_dependency(%q<rake>, [">= 0"])
       s.add_development_dependency(%q<bundler>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, ["~> 2.0.1"])
@@ -69,7 +70,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rdoc>, [">= 0"])
     else
       s.add_dependency(%q<bio-logger>, [">= 0"])
-      s.add_dependency(%q<nokogiri>, ["~> 1.6.0"])
+      s.add_dependency(%q<nokogiri>, ["~> 1.6.3"])
       s.add_dependency(%q<rake>, [">= 0"])
       s.add_dependency(%q<bundler>, [">= 0"])
       s.add_dependency(%q<jeweler>, ["~> 2.0.1"])
@@ -78,7 +79,7 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<bio-logger>, [">= 0"])
-    s.add_dependency(%q<nokogiri>, ["~> 1.6.0"])
+    s.add_dependency(%q<nokogiri>, ["~> 1.6.3"])
     s.add_dependency(%q<rake>, [">= 0"])
     s.add_dependency(%q<bundler>, [">= 0"])
     s.add_dependency(%q<jeweler>, ["~> 2.0.1"])
