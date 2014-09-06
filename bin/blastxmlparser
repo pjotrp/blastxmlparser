@@ -115,9 +115,15 @@ begin
       Bio::BlastXMLParser::XmlIterator.new(fn).to_enum
     end
     i = 1
+    iter_count = 0
     n.each do | iter |
+      iter_count += 1
+      hit_count = 0
       iter.each do | hit |
+        hit_count += 1
+        hsp_count = 0
         hit.each do | hsp |
+          hsp_count += 1
           do_print = if options.exec
                        eval(options.exec)
                      else
@@ -138,7 +144,7 @@ begin
                 end
                 print "\n"
                 else
-                  print [i,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t"),"\n" 
+                  print [iter_count,hit_count,hsp_count,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t"),"\n" 
               end
             end
             i += 1
