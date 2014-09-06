@@ -15,7 +15,7 @@ Jeweler::Tasks.new do |gem|
   gem.name = "bio-blastxmlparser"
   gem.homepage = "http://github.com/pjotrp/blastxmlparser"
   gem.license = "MIT"
-  gem.summary = %Q{Very fast BLAST XML to RDF/HTML/JSON/YAML/csv transformer}
+  gem.summary = %Q{Very fast parallel BLAST XML to RDF/HTML/JSON/YAML/csv transformer}
   gem.description = %Q{Fast big data BLAST XML parser and library; this libxml2 based version is 50x faster than BioRuby and comes with a nice CLI}
   gem.email = "pjotr.public01@thebird.nl"
   gem.authors = ["Pjotr Prins"]
