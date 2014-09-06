@@ -135,7 +135,6 @@ begin
     chunks = []
     chunks_count = 0
     NUM_CHUNKS=10_000
-    iter_count = 0
 
     process = lambda { |iter,i|  # Process one BLAST iter block
       res = []
@@ -143,9 +142,7 @@ begin
       hit_count = 0
       iter.each do | hit |
         hit_count += 1
-        hsp_count = 0
         hit.each do | hsp |
-          hsp_count += 1
           do_print = if options.filter
                        eval(options.filter)
                      else
@@ -161,14 +158,13 @@ begin
             else
               # Default output
               if options.fields
-                out = [iter_count+i+1,hit_count,hsp_count]
+                out = [iter.iter_num,hit_count,hsp.hsp_num]
                 options.fields.each do | f |
                   out << eval(f)
                 end
                 res << out.join("\t")+"\n"
               else
-                # res << [iter_count+i+1,hit_count,hsp_count,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t")+"\n"
-                res << [iter_count+i+1,hit_count,hsp_count,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t")+"\n"
+                res << [hit_count,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t")+"\n"
               end
             end
           end
@@ -183,7 +179,7 @@ begin
       end
     } # end output
 
-    iter_count += chunks.size
+    # iter_count += chunks.size
     n.each do | iter |
       chunks << iter
       chunks_count += 1
