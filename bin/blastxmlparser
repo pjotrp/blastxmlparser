@@ -126,7 +126,7 @@ begin
     end
     chunks = []
     chunks_count = 0
-    NUM_CHUNKS=1000
+    NUM_CHUNKS=10_000
     iter_count = 0
     process = lambda { |chunks| 
         collect = 
