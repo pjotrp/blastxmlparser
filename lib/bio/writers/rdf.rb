@@ -63,7 +63,7 @@ module BioRdf
         # Don't want Bio depency in templates!
         # logger = Bio::Log::LoggerPlus.new 'bio-rdf'
         # logger.warn "\nWARNING: Changed identifier <#{s}> to <#{id}>"
-        $stderr.print "\nWARNING: Changed identifier <#{s}> to <#{id}>"
+        # $stderr.print "\nWARNING: Changed identifier <#{s}> to <#{id}>"
       end
       if not RDF::valid_uri?(id)
         raise "Invalid URI after mangling <#{s}> to <#{id}>!"
