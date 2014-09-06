@@ -45,10 +45,12 @@ relevant fields are queried.
 Timings for parsing a 128 Mb BLAST XML file on 4x1.2GHz laptop 
 
 ```
-real    0m13.985s
-user    0m44.951s
-sys     0m3.676s
+  real    0m13.985s
+  user    0m44.951s
+  sys     0m3.676s
 ```
+
+which makes for pretty good core utilisation.
 
 ## Install
 
