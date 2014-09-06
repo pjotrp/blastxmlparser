@@ -29,6 +29,7 @@ end
 require 'bio-blastxmlparser'
 require 'optparse'
 require 'ostruct'
+require 'parallel'
 
 require 'bio-logger'
 Bio::Log::CLI.logger('stderr')
@@ -52,8 +53,13 @@ opts = OptionParser.new do |o|
     options.parser = p.to_sym
   end
   
-  o.on("-e filter","--exec filter",String, "Evaluate filter") do |s|
-    options.exec = s
+  o.on("--filter filter",String, "Filtering expression") do |s|
+    options.filter = s
+  end
+
+  o.on("-e filter","--exec filter",String, "Evaluate filter (deprecated)") do |s|
+    $stderr.print "WARNING: -e,--exec switch is deprecated, use --filter instead!\n"
+    options.filter = s
   end
 
   o.separator ""
@@ -114,16 +120,19 @@ begin
     else
       Bio::BlastXMLParser::XmlIterator.new(fn).to_enum
     end
-    i = 1
-    n.each do | iter |
+    # n.each do | iter |
+    Parallel.map_with_index(n, :in_processes => 4) do | iter,i |
+      line_count = 0
       iter.each do | hit |
         hit.each do | hsp |
-          do_print = if options.exec
-                       eval(options.exec)
+          do_print = if options.filter
+                       eval(options.filter)
                      else
                        true
                      end
           if do_print
+            line_count += 1
+            num = "#{i}-#{line_count}"
             if template
               print template.result(binding)
             elsif options.output_fasta
@@ -132,16 +141,15 @@ begin
             else
               # Default output
               if options.fields
-                print i,"\t"
+                print num,"\t"
                 options.fields.each do | f |
                   print eval(f),"\t"
                 end
                 print "\n"
                 else
-                  print [i,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t"),"\n" 
+                  print [num,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t"),"\n" 
               end
             end
-            i += 1
           end
         end
       end
