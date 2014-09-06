@@ -29,7 +29,6 @@ end
 require 'bio-blastxmlparser'
 require 'optparse'
 require 'ostruct'
-require 'parallel'
 
 require 'bio-logger'
 Bio::Log::CLI.logger('stderr')
@@ -110,7 +109,16 @@ begin
   Bio::Log::CLI.configure('bio-blastxmlparser')
   logger = Bio::Log::LoggerPlus['bio-blastxmlparser']
 
-  if options[:template]
+  if options.threads != 1
+    begin
+      require 'parallel'
+    rescue LoadError
+      $stderr.print "Error: Missing 'parallel' module. Install with command 'gem install parallel' if you want multiple threads\n"
+      options.threads = 1
+    end
+  end
+
+  if options.template
     include BioRdf
     fn = options.template
     raise "No template #{fn}!" if not File.exist?(fn)
@@ -128,62 +136,67 @@ begin
     chunks_count = 0
     NUM_CHUNKS=10_000
     iter_count = 0
-    process = lambda { |chunks| 
-        collect = 
-          Parallel.map_with_index(chunks, :in_processes => options.threads) do | iter,i |
-          res = []
-          line_count = 0
-          hit_count = 0
-          iter.each do | hit |
-            hit_count += 1
-            hsp_count = 0
-            hit.each do | hsp |
-              hsp_count += 1
-              do_print = if options.filter
-                           eval(options.filter)
-                         else
-                           true
-                         end
-              if do_print
-                line_count += 1
-                if template
-                  res << template.result(binding)
-                elsif options.output_fasta
-                  res << ">"+hit.accession+' '+iter.iter_num.to_s+'|'+iter.query_id+' '+hit.hit_id+' '+hit.hit_def+"\n"
-                  res << hsp.qseq+"\n"
-                else
-                  # Default output
-                  if options.fields
-                    out = [iter_count+i+1,hit_count,hsp_count]
-                    options.fields.each do | f |
-                      out << eval(f)
-                    end
-                    res << out.join("\t")+"\n"
-                  else
-                    res << [iter_count+i+1,hit_count,hsp_count,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t")+"\n"
-                  end
+
+    process = lambda { |iter,i|  # Process one BLAST iter block
+      res = []
+      line_count = 0
+      hit_count = 0
+      iter.each do | hit |
+        hit_count += 1
+        hsp_count = 0
+        hit.each do | hsp |
+          hsp_count += 1
+          do_print = if options.filter
+                       eval(options.filter)
+                     else
+                       true
+                     end
+          if do_print
+            line_count += 1
+            if template
+              res << template.result(binding)
+            elsif options.output_fasta
+              res << ">"+hit.accession+' '+iter.iter_num.to_s+'|'+iter.query_id+' '+hit.hit_id+' '+hit.hit_def+"\n"
+              res << hsp.qseq+"\n"
+            else
+              # Default output
+              if options.fields
+                out = [iter_count+i+1,hit_count,hsp_count]
+                options.fields.each do | f |
+                  out << eval(f)
                 end
+                res << out.join("\t")+"\n"
+              else
+                # res << [iter_count+i+1,hit_count,hsp_count,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t")+"\n"
+                res << [iter_count+i+1,hit_count,hsp_count,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t")+"\n"
               end
             end
           end
-          res
-        end # end parallel
-        collect.each do | result |
-          result.each do | line |
-            print line
-          end
         end
-        iter_count += chunks.size
-      }
+      end
+      res
+    } # end process 
+
+    output = lambda { |collection| 
+      collection.each do | result |
+        result.each { |line| print line }
+      end
+    } # end output
+
+    iter_count += chunks.size
     n.each do | iter |
       chunks << iter
       chunks_count += 1
       if chunks.size > NUM_CHUNKS
-        process.call(chunks)
+        output.call Parallel.map_with_index(chunks, :in_processes => options.threads) { | iter,i |
+          process.call(iter,i)
+        }
         chunks = []
       end
     end
-    process.call(chunks)
+    output.call Parallel.map_with_index(chunks, :in_processes => options.threads) { | iter,i |
+          process.call(iter,i)
+        }
   end
 rescue OptionParser::InvalidOption => e
   $stderr.print e.message
