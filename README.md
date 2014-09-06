@@ -2,8 +2,9 @@
 
 # bio-blastxmlparser
 
-blastxmlparser is a very fast big-data BLAST XML file parser, which can be used
-as command line utility. Use blastxmlparser to:
+blastxmlparser is a very fast parallelised big-data BLAST XML file
+parser, which can be used as command line utility. Use blastxmlparser
+to:
 
 * Parse BLAST XML
 * Filter output
@@ -24,12 +25,10 @@ can be used to filter results and requires no understanding of Ruby.
   blastxmlparser --help
 ```
 
-(see Installation, below, if it does not work)
-
 ## Performance
 
 XML parsing is expensive. blastxmlparser can use the fast Nokogiri C, or
-Java XML parsers, based on libxml2. Basically, a DOM parser is used
+Java XML parsers, based on libxml2 in parallel. A DOM parser is used
 after splitting the BLAST XML document into subsections.
 Tests show this is faster than a SAX
 parser with Ruby callbacks.  To see why libxml2 based Nokogiri is
@@ -38,31 +37,17 @@ fast, see this
 and [xml.com](http://www.xml.com/lpt/a/1703). 
 
 Blastxmlparser is designed with other optimizations, such as lazy
-evaluation, i.e., only creating objects when required, and (in a
-future version) parallelization. When parsing a full BLAST result
-usually only a few fields are used. By using XPath queries the parser
-makes sure only the relevant fields are queried.
+evaluation, i.e., only creating objects when required, and
+parallelism. When parsing a full BLAST result usually only a few
+fields are used. By using XPath queries the parser makes sure only the
+relevant fields are queried.
 
-Timings for parsing test/data/nt_example_blastn.m7 (file size 3.4Mb) 
+Timings for parsing a 128 Mb BLAST XML file on 4x1.2GHz laptop 
 
 ```
-  bio-blastxmlparser + Nokogiri DOM (default)
-
-  real    0m1.259s
-  user    0m1.052s
-  sys     0m0.144s
-
-  bio-blastxmlparser + Nokogiri split DOM
-
-  real    0m1.713s
-  user    0m1.444s
-  sys     0m0.160s
-
-  BioRuby ReXML DOM parser (old style)
-
-  real    1m14.548s
-  user    1m13.065s
-  sys     0m0.472s
+real    0m13.985s
+user    0m44.951s
+sys     0m3.676s
 ```
 
 ## Install
