@@ -179,20 +179,25 @@ begin
       end
     } # end output
 
-    # iter_count += chunks.size
-    n.each do | iter |
-      chunks << iter
-      chunks_count += 1
-      if chunks.size > NUM_CHUNKS
-        output.call Parallel.map_with_index(chunks, :in_processes => options.threads) { | iter,i |
-          process.call(iter,i)
-        }
-        chunks = []
+    if options.threads == 1
+      n.each do | iter |
+        process.call(iter,0).each { | line | print line }
       end
+    else
+      n.each do | iter |
+        chunks << iter
+        chunks_count += 1
+        if chunks.size > NUM_CHUNKS
+          output.call Parallel.map_with_index(chunks, :in_processes => options.threads) { | iter,i |
+            process.call(iter,i)
+          }
+          chunks = []
+        end
+      end
+      output.call Parallel.map_with_index(chunks, :in_processes => options.threads) { | iter,i |
+            process.call(iter,i)
+          }
     end
-    output.call Parallel.map_with_index(chunks, :in_processes => options.threads) { | iter,i |
-          process.call(iter,i)
-        }
   end
 rescue OptionParser::InvalidOption => e
   $stderr.print e.message
