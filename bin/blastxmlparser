@@ -146,8 +146,8 @@ begin
                   print eval(f),"\t"
                 end
                 print "\n"
-                else
-                  print [num,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t"),"\n" 
+              else
+                print [num,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t")+"\n" 
               end
             end
           end
