@@ -146,20 +146,19 @@ begin
                          end
               if do_print
                 line_count += 1
-                num = "#{chunks_count-NUM_CHUNKS+i}-#{line_count}"
                 if template
                   print template.result(binding)
                 elsif options.output_fasta
-                  print ">"+hit.accession+' '+iter.iter_num.to_s+'|'+iter.query_id+' '+hit.hit_id+' '+hit.hit_def+"\n"
-                  print hsp.qseq+"\n"
+                  res << ">"+hit.accession+' '+iter.iter_num.to_s+'|'+iter.query_id+' '+hit.hit_id+' '+hit.hit_def+"\n"
+                  res << hsp.qseq+"\n"
                 else
                   # Default output
                   if options.fields
-                    print num,"\t"
+                    out = [iter_count+i+1,hit_count,hsp_count]
                     options.fields.each do | f |
-                      print eval(f),"\t"
+                      out << eval(f)
                     end
-                    print "\n"
+                    res << out.join("\t")+"\n"
                   else
                     res << [iter_count+i+1,hit_count,hsp_count,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t")+"\n"
                   end
@@ -187,5 +186,5 @@ begin
     process.call(chunks)
   end
 rescue OptionParser::InvalidOption => e
-  opts[:invalid_argument] = e.message
+  $stderr.print e.message
 end
