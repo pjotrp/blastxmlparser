@@ -57,6 +57,10 @@ opts = OptionParser.new do |o|
     options.filter = s
   end
 
+  o.on("-t num", "--threads num",String, "Use parallel threads") do |num|
+    options.threads = num.to_i
+  end
+
   o.on("-e filter","--exec filter",String, "Evaluate filter (deprecated)") do |s|
     $stderr.print "WARNING: -e,--exec switch is deprecated, use --filter instead!\n"
     options.filter = s
@@ -67,7 +71,7 @@ opts = OptionParser.new do |o|
   o.on("-n fields","--named fields",String, "Print named fields") do |s|
     options.fields = s.split(/,/)
   end
-   o.on("--output-fasta","Output FASTA") do |b|
+  o.on("--output-fasta","Output FASTA") do |b|
     options.output_fasta = true
   end
   
@@ -120,36 +124,48 @@ begin
     else
       Bio::BlastXMLParser::XmlIterator.new(fn).to_enum
     end
-    # n.each do | iter |
-    Parallel.map_with_index(n, :in_processes => 4) do | iter,i |
-      line_count = 0
-      iter.each do | hit |
-        hit.each do | hsp |
-          do_print = if options.filter
-                       eval(options.filter)
-                     else
-                       true
-                     end
-          if do_print
-            line_count += 1
-            num = "#{i}-#{line_count}"
-            if template
-              print template.result(binding)
-            elsif options.output_fasta
-              print ">"+hit.accession+' '+iter.iter_num.to_s+'|'+iter.query_id+' '+hit.hit_id+' '+hit.hit_def+"\n"
-              print hsp.qseq+"\n"
-            else
-              # Default output
-              if options.fields
-                print num,"\t"
-                options.fields.each do | f |
-                  print eval(f),"\t"
+    chunks = []
+    n.each do | iter |
+      chunks << iter
+      if chunks.size > 3
+        collect = Parallel.map_with_index(chunks, :in_processes => 4) do | iter,i |
+          res = []
+          line_count = 0
+          iter.each do | hit |
+            hit.each do | hsp |
+              do_print = if options.filter
+                           eval(options.filter)
+                         else
+                           true
+                         end
+              if do_print
+                line_count += 1
+                num = "#{i}-#{line_count}"
+                if template
+                  print template.result(binding)
+                elsif options.output_fasta
+                  print ">"+hit.accession+' '+iter.iter_num.to_s+'|'+iter.query_id+' '+hit.hit_id+' '+hit.hit_def+"\n"
+                  print hsp.qseq+"\n"
+                else
+                  # Default output
+                  if options.fields
+                    print num,"\t"
+                    options.fields.each do | f |
+                      print eval(f),"\t"
+                    end
+                    print "\n"
+                  else
+                    res << [num,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t")+"\n"
+                  end
                 end
-                print "\n"
-              else
-                print [num,iter.iter_num,iter.query_id,hit.hit_id,hsp.hsp_num,hsp.evalue].join("\t")+"\n" 
               end
             end
+          end
+          res
+        end
+        collect.each do | result |
+          result.each do | line |
+            print line
           end
         end
       end
