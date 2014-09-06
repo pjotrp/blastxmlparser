@@ -125,10 +125,13 @@ begin
       Bio::BlastXMLParser::XmlIterator.new(fn).to_enum
     end
     chunks = []
+    chunks_count = 0
+    NUM_CHUNKS=1000
     n.each do | iter |
       chunks << iter
-      if chunks.size > 3
-        collect = Parallel.map_with_index(chunks, :in_processes => 4) do | iter,i |
+      chunks_count += 1
+      if chunks.size > NUM_CHUNKS
+        collect = Parallel.map_with_index(chunks, :in_processes => options.threads) do | iter,i |
           res = []
           line_count = 0
           iter.each do | hit |
@@ -140,7 +143,7 @@ begin
                          end
               if do_print
                 line_count += 1
-                num = "#{i}-#{line_count}"
+                num = "#{chunks_count-NUM_CHUNKS+i}-#{line_count}"
                 if template
                   print template.result(binding)
                 elsif options.output_fasta
@@ -168,6 +171,7 @@ begin
             print line
           end
         end
+        chunks = []
       end
     end
   end
