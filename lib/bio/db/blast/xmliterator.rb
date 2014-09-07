@@ -11,7 +11,7 @@ module Bio
       
       def to_enum
         logger = Bio::Log::LoggerPlus['bio-blastxmlparser']
-        logger.info("parsing (full) #{@fn}")
+        logger.info("parsing (:nosplit) #{@fn}")
         NokogiriBlastXml.new(File.new(@fn)).to_enum
       end
     end

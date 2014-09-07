@@ -81,7 +81,7 @@ headers may need to be installed first, for example on Debian:
 ```
   blastxmlparser [options] file(s)
 
-    -p, --parser name                Use full|split parser (default full)
+    -p, --parser name                Use split|nosplit parser (default split)
         --filter filter              Filtering expression
         --threads num                Use parallel threads
     -e, --exec filter                Evaluate filter (deprecated)
@@ -229,10 +229,10 @@ Likewise, using the RDF template
 
 ## Additional options
 
-To use the low-mem (iterated slower) version of the parser use
+To use the high-mem version of the parser (slightly faster on single core) use
 
 ```sh
-  blastxmlparser --parser split -n 'hsp.evalue,hsp.qseq' --filter 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+  blastxmlparser --parser nosplit --threads 1 -n 'hsp.evalue,hsp.qseq' --filter 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 ```
 
 ## API (Ruby library)

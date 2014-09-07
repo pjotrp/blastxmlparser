@@ -48,7 +48,7 @@ opts = OptionParser.new do |o|
 
   o.separator ""
 
-  o.on("-p name", "--parser name", "Use full|split parser (default full)") do |p|
+  o.on("-p name", "--parser name", "Use split|nosplit parser (default split)") do |p|
     options.parser = p.to_sym
   end
   
@@ -127,10 +127,11 @@ begin
 
   ARGV.each do | fn |
     logger.info("XML parsing #{fn}")
-    n = if options.parser == :split
-      Bio::BlastXMLParser::XmlSplitterIterator.new(fn).to_enum
+    n = if options.parser == :nosplit
+      NokogiriBlastXml.new(File.new(@fn)).to_enum
     else
-      Bio::BlastXMLParser::XmlIterator.new(fn).to_enum
+      # default
+      Bio::BlastXMLParser::XmlSplitterIterator.new(fn).to_enum
     end
     chunks = []
     chunks_count = 0
