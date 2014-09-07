@@ -8,7 +8,7 @@ to:
 
 * Parse BLAST XML
 * Filter output
-* Generate FASTA, JSON, YAML, RDF, HTML, tabular output etc.
+* Generate FASTA, JSON, YAML, RDF, JSON-LD, HTML, csv, tabular output etc. 
 
 Rather than loading everything in memory, XML is parsed by BLAST query
 (Iteration). Not only has this the advantage of low memory use, it also shows
@@ -22,6 +22,7 @@ can be used to filter results and requires no understanding of Ruby.
 
 ```sh
   gem install bio-blastxmlparser
+  gem install parallel # if you want multi-core support
   blastxmlparser --help
 ```
 
@@ -42,7 +43,7 @@ parallelism. When parsing a full BLAST result usually only a few
 fields are used. By using XPath queries the parser makes sure only the
 relevant fields are queried.
 
-Timings for parsing a 128 Mb BLAST XML file on 4x1.2GHz laptop 
+Timings for parsing a 128 Mb BLAST XML file on 4-core 1.2GHz laptop 
 
 ```
   real    0m13.985s
@@ -55,7 +56,7 @@ which makes for pretty good core utilisation.
 ## Install
 
 ```sh
-  gem install bio-blastxmlparser
+  gem install parallel bio-blastxmlparser
 ```
 
 Important: the parser is written for Ruby >= 1.9. Check with
@@ -65,18 +66,13 @@ Important: the parser is written for Ruby >= 1.9. Check with
   gem env
 ```
 
-Nokogiri XML parser is required. To install it,
-the libxml2 libraries and headers need to be installed first, for
-example on Debian:
+Nokogiri XML parser is required. To install it, the libxml2 libraries and
+headers may need to be installed first, for example on Debian:
 
 ```sh
   apt-get install libxslt-dev libxml2-dev
   gem install bio-blastxmlparser
 ```
-
-Nokogiri balks when libxml2 or libxslt is missing on your system (or
-may install something automatically). In the worst case you'll have to
-provide build paths, as described [here](http://nokogiri.org/tutorials/installing_nokogiri.html).
 
 ## Command line usage
 
@@ -86,7 +82,9 @@ provide build paths, as described [here](http://nokogiri.org/tutorials/installin
   blastxmlparser [options] file(s)
 
     -p, --parser name                Use full|split parser (default full)
-    -e, --exec filter                Evaluate filter
+        --filter filter              Filtering expression
+        --threads num                Use parallel threads
+    -e, --exec filter                Evaluate filter (deprecated)
 
     -n, --named fields               Print named fields
         --output-fasta               Output FASTA
@@ -105,7 +103,7 @@ provide build paths, as described [here](http://nokogiri.org/tutorials/installin
 Print result fields of iterations containing 'lcl', using a regex
 
 ```sh
-  blastxmlparser -e 'iter.query_id=~/lcl/' test/data/nt_example_blastn.m7
+  blastxmlparser --filter 'iter.query_id=~/lcl/' test/data/nt_example_blastn.m7
 ```
 
 prints a tab delimited
@@ -124,20 +122,20 @@ As this is evaluated Ruby, it is also possible to use the XML element
 names directly
 
 ```sh
-  blastxmlparser -e 'hsp["Hsp_bit-score"].to_i>145' test/data/nt_example_blastn.m7
+  blastxmlparser --filter 'hsp["Hsp_bit-score"].to_i>145' test/data/nt_example_blastn.m7
 ```
 
 Or the shorter 
 
 ```sh
-  blastxmlparser -e 'hsp.bit_score>145' test/data/nt_example_blastn.m7
+  blastxmlparser --filter 'hsp.bit_score>145' test/data/nt_example_blastn.m7
 ```
 
 And it is possible to print (non default) named fields where E-value < 0.001 
 and hit length > 100. E.g.
 
 ```sh
-  blastxmlparser -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+  blastxmlparser -n 'hsp.evalue,hsp.qseq' --filter 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 
   1       5.82208e-34     AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCT...
   2       5.82208e-34     AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCT...
@@ -150,7 +148,7 @@ and hit length > 100. E.g.
 prints the evalue and qseq columns. To output FASTA use --output-fasta
 
 ```sh
-  blastxmlparser --output-fasta -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+  blastxmlparser --output-fasta --filter 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 ```
 
 which prints matching sequences, where the first field is the accession, followed
@@ -170,7 +168,7 @@ To have more output options blastxmlparser can use an [ERB
 template](http://www.stuartellis.eu/articles/erb/) for every match. This is a
 very flexible option that can output textual formats such as JSON, YAML, HTML
 and RDF. Examples are provided in
-[./templates](https://github.com/pjotrp/bioruby-vcf/templates/). A JSON
+[./templates](https://github.com/pjotrp/blastxmlparser/templates/). A JSON
 template could be
 
 ```Javascript
@@ -189,7 +187,7 @@ template could be
 To get JSON, run it with
 
 ```sh
-  blastxmlparser --template template/blast2json.erb -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+  blastxmlparser --template template/blast2json.erb --filter 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 ```
 
 ```Javascript
@@ -208,7 +206,7 @@ To get JSON, run it with
 Likewise, using the RDF template
 
 ```sh
-  blastxmlparser --template template/blast2rdf.erb -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+  blastxmlparser --template template/blast2rdf.erb --filter 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 ```
 
 ```ruby
@@ -234,7 +232,7 @@ Likewise, using the RDF template
 To use the low-mem (iterated slower) version of the parser use
 
 ```sh
-  blastxmlparser --parser split -n 'hsp.evalue,hsp.qseq' -e 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
+  blastxmlparser --parser split -n 'hsp.evalue,hsp.qseq' --filter 'hsp.evalue<0.01 and hit.len>100' test/data/nt_example_blastn.m7
 ```
 
 ## API (Ruby library)
