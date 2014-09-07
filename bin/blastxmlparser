@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# BioRuby bio-blastxmlparser Plugin
+# blastxmlparser
 # Author:: Pjotr Prins
 # License:: MIT License
 #
