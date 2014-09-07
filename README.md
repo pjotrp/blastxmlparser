@@ -12,10 +12,10 @@ to:
 
 Rather than loading everything in memory, XML is parsed by BLAST query
 (Iteration). Not only has this the advantage of low memory use, it also shows
-results early, and it may be faster when IO continues in parallel (disk
+results early, and it is faster when IO continues in parallel (disk
 read-ahead).
 
-Next to the API, blastxmlparser comes as a command line utility, which
+blastxmlparser comes as a command line utility, which
 can be used to filter results and requires no understanding of Ruby.
 
 # Quick start
@@ -28,27 +28,25 @@ can be used to filter results and requires no understanding of Ruby.
 
 ## Performance
 
-XML parsing is expensive. blastxmlparser can use the fast Nokogiri C, or
-Java XML parsers, based on libxml2 in parallel. A DOM parser is used
-after splitting the BLAST XML document into subsections.
-Tests show this is faster than a SAX
-parser with Ruby callbacks.  To see why libxml2 based Nokogiri is
-fast, see this
-[benchmark](http://www.rubyinside.com/ruby-xml-performance-benchmarks-1641.html)
-and [xml.com](http://www.xml.com/lpt/a/1703). 
+XML parsing and transformation is expensive. blastxmlparser can use
+the fast Nokogiri C, or Java XML parsers, based on libxml2 in
+parallel. A DOM parser is used after splitting the BLAST XML document
+into subsections.  Tests show this is faster than a SAX parser with
+Ruby callbacks.  To see why libxml2 based Nokogiri is fast, see
+[xml.com](http://www.xml.com/lpt/a/1703). And blastxmlparser uses 
+Nokogiri in parallel.
 
 Blastxmlparser is designed with other optimizations, such as lazy
-evaluation, i.e., only creating objects when required, and
-parallelism. When parsing a full BLAST result usually only a few
-fields are used. By using XPath queries the parser makes sure only the
-relevant fields are queried.
+evaluation, i.e., only creating objects when required. When parsing a
+full BLAST result usually only a few fields are used. By using XPath
+queries the parser makes sure only the relevant fields are queried.
 
-Timings for parsing a 128 Mb BLAST XML file on 4-core 1.2GHz laptop 
+Timings for parsing a 1 Gb BLAST XML file on 4-core 1.2GHz laptop 
 
 ```
-  real    0m13.985s
-  user    0m44.951s
-  sys     0m3.676s
+  real    2m40.248s
+  user    8m11.075s
+  sys     0m37.198s
 ```
 
 which makes for pretty good core utilisation.

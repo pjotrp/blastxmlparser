@@ -147,11 +147,11 @@ begin
     NUM_CHUNKS=10_000
 
     process = lambda { |iter2,i|  # Process one BLAST iter block
-      if iter2.kind_of?(Array)
+      if parser_type == :nosplit
+        iter = iter2 
+      else
         xml = Nokogiri::XML.parse(iter2.join) { | cfg | cfg.noblanks }
         iter = Bio::BlastXMLParser::NokogiriBlastIterator.new(xml,self,:prefix=>nil)
-      else
-        iter = iter2 
       end
       res = []
       line_count = 0
