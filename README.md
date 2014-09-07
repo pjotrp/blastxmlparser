@@ -49,7 +49,8 @@ Timings for parsing a 1 Gb BLAST XML file on 4-core 1.2GHz laptop
   sys     0m37.198s
 ```
 
-which makes for pretty good core utilisation.
+which makes for pretty good core utilisation. If you have enough RAM it makes sense
+to try the --parse nosplit option. It may be faster.
 
 ## Install
 
@@ -57,7 +58,7 @@ which makes for pretty good core utilisation.
   gem install parallel bio-blastxmlparser
 ```
 
-Important: the parser is written for Ruby >= 1.9. Check with
+Important: the parser is written for Ruby 1.9 or later. Check with
 
 ```sh
   ruby -v
