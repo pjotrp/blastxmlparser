@@ -127,23 +127,32 @@ begin
 
   ARGV.each do | fn |
     logger.info("XML parsing #{fn}")
-    n = if options.parser == :nosplit
-      NokogiriBlastXml.new(File.new(@fn)).to_enum
+    parser_type = options.parser
+    if !parser_type
+      # If a file is smaller than 0.5 Gb the nosplit parser is used by default for performance
+      if File.size(fn) > 512_000_000
+        parser_type = :split
+      else
+        parser_type = :nosplit
+      end
+    end
+    n = if parser_type == :nosplit
+      Bio::BlastXMLParser::NokogiriBlastXml.new(File.new(fn)).to_enum
     else
       # default
-      Enumerator.new do | yielder | 
-        splitter = Bio::BlastXMLParser::BlastXmlSplitter.new(fn)
-        splitter.each do | buf |
-          iteration = Nokogiri::XML.parse(buf.join) { | cfg | cfg.noblanks }
-          yielder.yield Bio::BlastXMLParser::NokogiriBlastIterator.new(iteration,self,:prefix=>nil)
-        end
-      end
+      Bio::BlastXMLParser::BlastXmlSplitter.new(fn)
     end
     chunks = []
     chunks_count = 0
     NUM_CHUNKS=10_000
 
-    process = lambda { |iter,i|  # Process one BLAST iter block
+    process = lambda { |iter2,i|  # Process one BLAST iter block
+      if iter2.kind_of?(Array)
+        xml = Nokogiri::XML.parse(iter2.join) { | cfg | cfg.noblanks }
+        iter = Bio::BlastXMLParser::NokogiriBlastIterator.new(xml,self,:prefix=>nil)
+      else
+        iter = iter2 
+      end
       res = []
       line_count = 0
       hit_count = 0
