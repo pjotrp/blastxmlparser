@@ -49,8 +49,10 @@ Timings for parsing a 1 Gb BLAST XML file on 4-core 1.2GHz laptop
   sys     0m37.198s
 ```
 
-which makes for pretty good core utilisation. If you have enough RAM it makes sense
-to try the --parse nosplit option. It may be faster.
+which makes for pretty good core utilisation and limited RAM use. If
+you have enough RAM it may make sense to try the `--parser nosplit'
+option which starts by reading the full DOM into RAM. It may be faster
+and show different IO characteristics.
 
 ## Install
 
