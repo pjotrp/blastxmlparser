@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "bio-blastxmlparser"
-  s.version = "2.0.0"
+  s.version = "2.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pjotr Prins"]
-  s.date = "2014-09-06"
+  s.date = "2014-09-07"
   s.description = "Fast big data BLAST XML parser and library; this libxml2 based version is 50x faster than BioRuby and comes with a nice CLI"
   s.email = "pjotr.public01@thebird.nl"
   s.executables = ["blastxmlparser"]
