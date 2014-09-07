@@ -131,7 +131,13 @@ begin
       NokogiriBlastXml.new(File.new(@fn)).to_enum
     else
       # default
-      Bio::BlastXMLParser::XmlSplitterIterator.new(fn).to_enum
+      Enumerator.new do | yielder | 
+        splitter = Bio::BlastXMLParser::BlastXmlSplitter.new(fn)
+        splitter.each do | buf |
+          iteration = Nokogiri::XML.parse(buf.join) { | cfg | cfg.noblanks }
+          yielder.yield Bio::BlastXMLParser::NokogiriBlastIterator.new(iteration,self,:prefix=>nil)
+        end
+      end
     end
     chunks = []
     chunks_count = 0
