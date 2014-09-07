@@ -204,9 +204,16 @@ begin
         chunks << iter
         chunks_count += 1
         if chunks.size > NUM_CHUNKS
-          output.call Parallel.map_with_index(chunks, :in_processes => options.threads) { | iter,i |
+          out = Parallel.map_with_index(chunks, :in_processes => options.threads) { | iter,i |
             process.call(iter,i)
           }
+          # Output is forked to a separate process too
+          fork do
+            output.call out
+            STDOUT.flush
+            STDOUT.close
+            exit 0
+          end
           chunks = []
         end
       end
