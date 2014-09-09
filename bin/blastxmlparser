@@ -91,6 +91,7 @@ opts = OptionParser.new do |o|
   
   o.on("-q", "--quiet", "Run quietly") do |q|
     Bio::Log::CLI.trace('error')
+    options.quiet = true
   end
   
   o.on("-v", "--verbose", "Run verbosely") do |v|
@@ -124,6 +125,10 @@ begin
     raise "No template #{fn}!" if not File.exist?(fn)
     template = ERB.new(File.read(fn))
   end
+
+  $stderr.print options,"\n" if not options.quiet
+
+  raise "No input file(s) defined" if ARGV.size == 0
 
   ARGV.each do | fn |
     logger.info("XML parsing #{fn}")
