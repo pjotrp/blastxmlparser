@@ -4,11 +4,11 @@
 %>
 :<%= blastid %>  :query  :<%= id %>
 :<%= id %>
-  :query_def   "<%= hit.parent.query_def %>",
-  :num         <%= hit.hit_num %>,
-  :accession   "<%= hit.accession %>",
-  :len         <%= hit.len %>,
-  :identity    <%= hsp.identity %>,
-  :align_len   <%= hsp.align_len %>,
-  :bitscore    <%= hsp.bit_score %>,
+  :query_def   "<%= hit.parent.query_def %>";
+  :num         <%= hit.hit_num %>;
+  :accession   "<%= hit.accession %>";
+  :len         <%= hit.len %>;
+  :identity    <%= hsp.identity %>;
+  :align_len   <%= hsp.align_len %>;
+  :bitscore    <%= hsp.bit_score %>;
   :evalue      <%= hsp.evalue %> .
