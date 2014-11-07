@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "bio-blastxmlparser"
-  s.version = "2.0.1"
+  s.version = "2.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pjotr Prins"]
-  s.date = "2014-09-07"
+  s.date = "2014-11-07"
   s.description = "Fast big data BLAST XML parser and library; this libxml2 based version is 50x faster than BioRuby and comes with a nice CLI"
   s.email = "pjotr.public01@thebird.nl"
   s.executables = ["blastxmlparser"]
@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
     "lib/bio/db/blast/xmliterator.rb",
     "lib/bio/db/blast/xmlsplitter.rb",
     "lib/bio/writers/rdf.rb",
+    "lib/bio/writers/template.rb",
     "sample/bioruby.rb",
     "sample/blastxmlparserdemo.rb",
     "sample/libxml_sax.rb",
@@ -43,6 +44,7 @@ Gem::Specification.new do |s|
     "spec/bio-blastxmlparser_spec.rb",
     "spec/spec_helper.rb",
     "template/blast2json.erb",
+    "template/blast2json2.erb",
     "template/blast2rdf-minimal.erb",
     "template/blast2rdf.erb",
     "test/data/aa_example.fasta",
