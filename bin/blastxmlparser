@@ -171,7 +171,7 @@ begin
           if do_print
             line_count += 1
             if template
-              res << template.result(binding)
+              res << template.body(binding)
             elsif options.output_fasta
               res << ">"+hit.accession+' '+iter.iter_num.to_s+'|'+iter.query_id+' '+hit.hit_id+' '+hit.hit_def+"\n"
               res << hsp.qseq+"\n"
