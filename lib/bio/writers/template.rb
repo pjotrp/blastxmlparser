@@ -10,7 +10,9 @@ module Bio
     end
 
     def parse buf
-      header = body = footer = []
+      header = []
+      body = []
+      footer = []
       where = :header
       buf.split("\n").each do | line |
         case where
@@ -33,7 +35,7 @@ module Bio
             footer << line
         end
       end
-      if body == nil
+      if body == []
         body = header
         header = []
       end
