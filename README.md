@@ -274,9 +274,12 @@ may generate something like
     "id":        "lcl|V_105720",
     "len":       180,
     "E-value":   0.0247015,
-  }
+  },
 ]
 ```
+
+Note that the template is not smart enough to remove the final comma
+from the last BODY element. To make it valid JSON that needs to be removed.
 
 ## Additional options
 
