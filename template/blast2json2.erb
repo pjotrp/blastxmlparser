@@ -1,19 +1,28 @@
 =HEADER
-/* TEST HEADER */
-=BODY
+<% require 'json' %>
+[
+  { "HEADER": {
+    "options":  <%= options.to_h.to_json %>,
+    "files":    <%= ARGV %>,
+    "version":  "<%= BLASTXML_VERSION %>"
+  },
 
-{ "<%= hit.parent.query_def %>": {
-  "query_id":  "<%= hit.parent.query_id %>",
-  "num":       <%= hit.hit_num %>,
-  "accession": "<%= hit.accession %>",
-  "id":        "<%= hit.hit_id %>",
-  "len":       <%= hit.len %>,
-  "E-value":   <%= hsp.evalue %>,
-  "identity":  <%= hsp.identity %>,
-  "align_len": <%= hsp.align_len %>,
-  "bitscore":  <%= hsp.bit_score %>,
-  "qseq":      "<%= hsp.qseq %>",
-  "midline":   "<%= hsp.midline %>", 
-  "hseq":      "<%= hsp.hseq %>",
-};
+=BODY
+  { "<%= hit.parent.query_def %>": {
+    "query_id":  "<%= hit.parent.query_id %>",
+    "num":       <%= hit.hit_num %>,
+    "accession": "<%= hit.accession %>",
+    "id":        "<%= hit.hit_id %>",
+    "len":       <%= hit.len %>,
+    "E-value":   <%= hsp.evalue %>,
+    "identity":  <%= hsp.identity %>,
+    "align_len": <%= hsp.align_len %>,
+    "bitscore":  <%= hsp.bit_score %>,
+    "qseq":      "<%= hsp.qseq %>",
+    "midline":   "<%= hsp.midline %>", 
+    "hseq":      "<%= hsp.hseq %>",
+  },
+
+=FOOTER
+]
 

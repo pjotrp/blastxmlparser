@@ -236,10 +236,12 @@ can be
 
 ```Javascript
 =HEADER
+<% require 'json' %>
 [
-  { "Meta": {
-      "query" : <%= hit.query %>
-    }
+  { "HEADER": {
+    "options":  <%= options.to_h.to_json %>,
+    "files":    <%= ARGV %>,
+    "version":  "<%= BLASTXML_VERSION %>"
   },
 =BODY
   { "<%= hit.parent.query_def %>": {
@@ -252,12 +254,28 @@ can be
 ]
 ```
 
-Note that the template is smart enough to remove the final comma ','
-from the last BODY element, though you can also inject in the template something like
+may generate something like
 
-
-```ruby
-  <%= ( body.last? ? "", "," ) %>.
+```Javascript
+[
+  { "HEADER": {
+    "options":  {"template":"template/blast2json2.erb","filter":"hsp.evalue>0.01"},
+    "files":    ["test/data/nt_example_blastn.m7"],
+    "version":  "2.0.2-pre1"
+  },
+  { "I_1 [477 - 884] ": {
+    "num":       41,
+    "id":        "lcl|X_42251",
+    "len":       153,
+    "E-value":   0.0247015,
+  },
+  { "I_1 [477 - 884] ": {
+    "num":       43,
+    "id":        "lcl|V_105720",
+    "len":       180,
+    "E-value":   0.0247015,
+  }
+]
 ```
 
 ## Additional options

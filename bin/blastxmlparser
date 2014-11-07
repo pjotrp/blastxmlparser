@@ -129,6 +129,7 @@ begin
 
   raise "No input file(s) defined" if ARGV.size == 0
 
+  
   ARGV.each do | fn |
     logger.info("XML parsing #{fn}")
     parser_type = options.parser
@@ -149,6 +150,7 @@ begin
     chunks = []
     chunks_count = 0
     NUM_CHUNKS=10_000
+    print template.header(binding) if template
 
     process = lambda { |iter2,i|  # Process one BLAST iter block
       if parser_type == :nosplit
@@ -225,6 +227,7 @@ begin
             process.call(iter,i)
           }
     end
+    print template.footer(binding) if template
   end
 rescue OptionParser::InvalidOption => e
   $stderr.print e.message
