@@ -75,7 +75,6 @@ opts = OptionParser.new do |o|
   end
   
   o.on("-t erb","--template erb",String, "Use ERB template for output") do |s|
-    require 'erb'
     options.template = s
   end
   
@@ -119,11 +118,11 @@ begin
     end
   end
 
+  # Prepare the ERB template
   if options.template
     include BioRdf
-    fn = options.template
-    raise "No template #{fn}!" if not File.exist?(fn)
-    template = ERB.new(File.read(fn))
+    require 'bio/writers/template'
+    template = Bio::Template.new(options.template)
   end
 
   $stderr.print options,"\n" if not options.quiet

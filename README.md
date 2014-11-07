@@ -107,7 +107,7 @@ Print result fields of iterations containing 'lcl', using a regex
   blastxmlparser --filter 'iter.query_id=~/lcl/' test/data/nt_example_blastn.m7
 ```
 
-prints a tab delimited
+prints a (default) tab delimited to stdout
 
 ```sh
   1       1       lcl|1_0 lcl|I_74685     1       5.82208e-34
@@ -226,6 +226,38 @@ Likewise, using the RDF template
   :midline     "|||||||||||||||||||| |||||||| |       |||||||||||||||||||||||||||||||", 
   :hseq        "ATGGGAGATGGAATTGAACCATCATGGAATG-------ACCGAAGCACAACCGACTGTGCCACCATCCA",
   :evalue      8.1089e-12 .
+```
+
+### Metadata
+
+Templates can also print data as a header of the JSON/YAML/RDF output. For this
+use the '=' prefix with HEADER, BODY, FOOTER keywords in the template. A small example
+can be
+
+```Javascript
+=HEADER
+[
+  { "Meta": {
+      "query" : <%= hit.query %>
+    }
+  },
+=BODY
+  { "<%= hit.parent.query_def %>": {
+    "num":      <%= hit.hit_num %>,
+    "id":       "<%= hit.hit_id %>",
+    "len":      <%= hit.len %>,
+    "E-value":  <%= hsp.evalue %>,
+  },
+=FOOTER
+]
+```
+
+Note that the template is smart enough to remove the final comma ','
+from the last BODY element, though you can also inject in the template something like
+
+
+```ruby
+  <%= ( body.last? ? "", "," ) %>.
 ```
 
 ## Additional options
