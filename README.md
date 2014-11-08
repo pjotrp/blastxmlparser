@@ -279,7 +279,11 @@ may generate something like
 ```
 
 Note that the template is not smart enough to remove the final comma
-from the last BODY element. To make it valid JSON that needs to be removed.
+from the last BODY element. To make it valid JSON that needs to be
+removed. A future version may add a parameter to the BODY element or a
+global rewrite function for this purpose. A simple '<%= ( body.last? ? "" : "," ) %>'
+does not work here because the parallel parser does not
+know which line is the last.
 
 ## Additional options
 
