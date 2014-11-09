@@ -1,10 +1,24 @@
+=HEADER
+# BLAST RDF template example
+#
+#   options:  <%= options.to_h %>
+#   files:    <%= ARGV %>
+#   date:     <%= Time.now %>
+#   version:  <%= BLASTXML_BANNER %>
+
+@prefix gene: <http://biobeat.org/rdf/gwp/gene-names#> .
+@prefix : <http://biobeat.org/rdf/megablast#> .
+
+=BODY
 <%
   blastid = Turtle::mangle_identifier(hit.parent.query_def) 
   id = blastid+'_'+hit.hit_num.to_s
+  gene_name = hit.parent.query_def.split(/ /).first
 %>
 :<%= blastid %>  :query  :<%= id %>
 :<%= id %>
-  :query_def   "<%= hit.parent.query_def %>";
+  :query_def   "<%= hit.parent.query_def.strip %>";
+  gene:gene_name   "<%= gene_name %>";
   :num         <%= hit.hit_num %>;
   :accession   "<%= hit.accession %>";
   :len         <%= hit.len %>;
@@ -12,3 +26,5 @@
   :align_len   <%= hsp.align_len %>;
   :bitscore    <%= hsp.bit_score %>;
   :evalue      <%= hsp.evalue %> .
+
+=FOOTER

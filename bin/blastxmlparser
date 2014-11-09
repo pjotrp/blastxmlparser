@@ -10,8 +10,8 @@ rootpath = File.dirname(File.dirname(__FILE__))
 $: << File.join(rootpath,'lib')
 
 BLASTXML_VERSION = File.new(File.join(rootpath,'VERSION')).read.chomp
-
-$stderr.print "BLAST XML Parser "+BLASTXML_VERSION+" Copyright (C) 2014 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
+BLASTXML_BANNER = "BLAST XML Parser "+BLASTXML_VERSION+" Copyright (C) 2014 Pjotr Prins <pjotr.prins@thebird.nl>"
+$stderr.print BLASTXML_BANNER,"\n\n"
 
 USAGE = <<EOM
 
