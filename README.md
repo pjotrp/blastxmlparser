@@ -244,7 +244,7 @@ can be
     "version":  "<%= BLASTXML_VERSION %>"
   },
 =BODY
-  { "<%= hit.parent.query_def %>": {
+  { "<%= hit.parent.query_def.strip %>": {
     "num":      <%= hit.hit_num %>,
     "id":       "<%= hit.hit_id %>",
     "len":      <%= hit.len %>,
@@ -263,13 +263,13 @@ may generate something like
     "files":    ["test/data/nt_example_blastn.m7"],
     "version":  "2.0.2-pre1"
   },
-  { "I_1 [477 - 884] ": {
+  { "I_1 [477 - 884]": {
     "num":       41,
     "id":        "lcl|X_42251",
     "len":       153,
     "E-value":   0.0247015,
   },
-  { "I_1 [477 - 884] ": {
+  { "I_1 [477 - 884]": {
     "num":       43,
     "id":        "lcl|V_105720",
     "len":       180,
@@ -281,7 +281,12 @@ may generate something like
 Note that the template is not smart enough to remove the final comma
 from the last BODY element. To make it valid JSON that needs to be
 removed. A future version may add a parameter to the BODY element or a
-global rewrite function for this purpose. A simple '<%= ( body.last? ? "" : "," ) %>'
+global rewrite function for this purpose. A simple
+
+```ruby
+<%= ( body.last? ? "" : "," ) %>
+```
+
 does not work here because the parallel parser does not
 know which line is the last.
 
