@@ -129,6 +129,7 @@ begin
 
   raise "No input file(s) defined" if ARGV.size == 0
 
+  output_running = false # a lock for tracking the output fork
   
   ARGV.each do | fn |
     logger.info("XML parsing #{fn}")
@@ -214,14 +215,22 @@ begin
             process.call(iter,i)
           }
           # Output is forked to a separate process too
-          fork do
+          while output_running do
+            sleep 0.01
+          end
+
+          Parallel.map(1..1, :finish => lambda { |item,i,result| output_running=false }) { |num|
+            output_running = true
             output.call out
             STDOUT.flush
             STDOUT.close
-            exit 0
-          end
+          }
+
           chunks = []
         end
+      end
+      while output_running do
+        sleep 0.01
       end
       output.call Parallel.map_with_index(chunks, :in_processes => options.threads) { | iter,i |
             process.call(iter,i)
