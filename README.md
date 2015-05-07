@@ -2,7 +2,7 @@
 
 # bio-blastxmlparser
 
-blastxmlparser is a very fast parallelised big-data BLAST XML file
+blastxmlparser is a very fast parallel big-data BLAST XML file
 parser, which can be used as command line utility. Use blastxmlparser
 to:
 
@@ -161,6 +161,12 @@ by query iteration id, and hit_id. E.g.
   >I_1 1|lcl|1_0 lcl|I_1 [477 - 884] 
   AGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCTGCCAACCTATATGCTCCTGTGTTTAG
   etc. etc.
+```
+
+Another example outputs all definitions containing a string
+
+```sh
+  /blastxmlparser -n hit.hit_def --filter 'hit.hit_def=~/G. Ratti/i' 
 ```
 
 ## Modify output
