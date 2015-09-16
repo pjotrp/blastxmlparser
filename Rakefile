@@ -1,27 +1,5 @@
 require 'rubygems'
-require 'bundler'
-begin
-  Bundler.setup(:default, :development)
-rescue Bundler::BundlerError => e
-  $stderr.puts e.message
-  $stderr.puts "Run `bundle install` to install missing gems"
-  exit e.status_code
-end
 require 'rake'
-
-require 'jeweler'
-Jeweler::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "bio-blastxmlparser"
-  gem.homepage = "http://github.com/pjotrp/blastxmlparser"
-  gem.license = "MIT"
-  gem.summary = %Q{Very fast parallel BLAST XML to RDF/HTML/JSON/YAML/csv transformer}
-  gem.description = %Q{Fast big data BLAST XML parser and library; this libxml2 based version is 50x faster than BioRuby and comes with a nice CLI}
-  gem.email = "pjotr.public01@thebird.nl"
-  gem.authors = ["Pjotr Prins"]
-  gem.required_ruby_version = '>=1.9.2'
-end
-Jeweler::RubygemsDotOrgTasks.new
 
 require 'rspec/core'
 require 'rspec/core/rake_task'
