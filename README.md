@@ -429,5 +429,5 @@ blastxmlparser is listed at http://biogems.info
 
 ## Copyright
 
-Copyright (c) 2011-2014 Pjotr Prins under the MIT licence.  See LICENSE.txt and http://www.opensource.org/licenses/mit-license.html for further details.
+Copyright (c) 2011-2015 Pjotr Prins under the MIT licence.  See LICENSE.txt and http://www.opensource.org/licenses/mit-license.html for further details.
 
